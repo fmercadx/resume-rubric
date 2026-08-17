@@ -1,0 +1,63 @@
+name: CI
+
+# Railway deploys every push to main automatically, so these checks are the only thing
+# standing between a bad commit and production. Keep them fast and boring.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Server parses
+        run: node --check server.js
+
+      - name: The app is intact
+        run: |
+          node -e '
+            const fs = require("fs");
+            const html = fs.readFileSync("index.html", "utf8");
+            const need = [
+              "<title>", "</html>",
+              "id=\"resumeTa\"", "id=\"jobTa\"", "id=\"runBtn\"",
+              "id=\"p-plan\"", "id=\"fileInput\"", "id=\"undoBtn\"",
+              "function score(", "function readPdf(", "function readDocx("
+            ];
+            const missing = need.filter(s => !html.includes(s));
+            if (missing.length) {
+              console.error("index.html is missing: " + missing.join(", "));
+              process.exit(1);
+            }
+            // a truncated upload is the failure this is really guarding against
+            if (html.length < 150000) {
+              console.error("index.html is only " + html.length + " bytes, expected far more");
+              process.exit(1);
+            }
+            const open = (html.match(/<script\b/g) || []).length;
+            const close = (html.match(/<\/script>/g) || []).length;
+            if (open !== close) {
+              console.error("unbalanced script tags: " + open + " open, " + close + " close");
+              process.exit(1);
+            }
+            console.log("index.html ok, " + (html.length / 1024).toFixed(1) + " KB");
+          '
+
+      - name: Server boots and serves the app
+        run: |
+          PORT=3000 node server.js &
+          for i in $(seq 1 20); do
+            sleep 0.5
+            curl -sf http://localhost:3000/healthz > /dev/null && break
+          done
+          curl -sf http://localhost:3000/healthz | grep -q '^ok$'
+          curl -sf http://localhost:3000/ | grep -q '<title>Shortlist'
+          echo "server serves the app"

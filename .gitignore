@@ -1,0 +1,13 @@
+node_modules/
+npm-debug.log*
+.env
+.env.*
+.DS_Store
+Thumbs.db
+
+# never commit real resumes or documents used for testing
+*.pdf
+*.docx
+*.doc
+*.rtf
+_test.*

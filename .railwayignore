@@ -1,0 +1,2 @@
+# the artifact build is the same page without its document wrapper; the server does not need it
+shortlist-artifact.html

@@ -59,8 +59,7 @@ function record(which) {
   dirty = true;
 }
 
-/* write at most once every 20 seconds, so a rush of traffic is not a rush of disk writes */
-setInterval(() => {
+function flush() {
   if (!dirty) return;
   const keys = Object.keys(stats.days).sort();
   while (keys.length > KEEP_DAYS) delete stats.days[keys.shift()];
@@ -70,7 +69,17 @@ setInterval(() => {
   } catch (e) {
     /* read only disk. Keep counting in memory rather than falling over. */
   }
-}, 20000).unref();
+}
+
+/* write at most once every 20 seconds, so a rush of traffic is not a rush of disk writes */
+setInterval(flush, 20000).unref();
+
+/* Railway sends SIGTERM on every deploy and restart. Without this, up to twenty
+   seconds of counts are thrown away each time the service ships. */
+["SIGTERM", "SIGINT"].forEach(sig => {
+  process.on(sig, () => { flush(); process.exit(0); });
+});
+process.on("exit", flush);
 
 function summary() {
   const days = Object.keys(stats.days).sort();

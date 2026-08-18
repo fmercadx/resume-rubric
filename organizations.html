@@ -254,9 +254,9 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
             <span><b>Where is participant data stored?</b> On their own device only, in browser storage they can wipe with one button.</span></li>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
-            <span><b>What do you retain?</b> Nothing. There is no database and no accounts.</span></li>
+            <span><b>What do you retain?</b> A count of page visits per day, and nothing else. No database of people, no accounts.</span></li>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
-            <span><b>Any third party processors?</b> None. No analytics, no trackers, no ad pixels, no outside services.</span></li>
+            <span><b>Any third party processors?</b> None. No analytics service, no trackers, no ad pixels, no outside services. We count page opens ourselves, in one number a day.</span></li>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
             <span><b>Can we host it ourselves?</b> Yes. It is one file under AGPL-3.0. Put it behind your own login if you want.</span></li>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
@@ -412,7 +412,7 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
     <div class="faq">
       <details class="qa" open>
         <summary>What happens to a participant's resume?</summary>
-        <p>It stays in the browser tab. It is read by JavaScript already on their machine, scored there, and never transmitted. If they save a version, it goes to that browser's local storage on that device, and a single button deletes all of it. Close the tab without saving and nothing is left anywhere.</p>
+        <p>It stays in the browser tab. It is read by JavaScript already on their machine, scored there, and never sent anywhere. If they save a version, it goes to that browser's local storage on that device, and one button deletes all of it. Close the tab without saving and nothing is left anywhere.</p><p>The server counts how many times each page was opened, so we can answer how many people used it. That count is a number per day. It holds no IP address, no browser details, no cookie and no resume text, and the page never sends anything to it. You can read the whole thing at <b>/stats</b>.</p>
       </details>
       <details class="qa">
         <summary>Do we need a data processing agreement?</summary>

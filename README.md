@@ -25,9 +25,13 @@ browser. One HTML file, no framework, no build step, no dependencies.
 
 ## Privacy
 
-Your resume is never uploaded. The engine, every lexicon and every rule, is in the page you
-already downloaded, and the analysis runs locally. The server sends one file and stores
-nothing. Saved versions live in your browser's local storage and can be deleted in one click.
+Your resume is never uploaded. The engine, every word list and every rule, is in the page you
+already downloaded, and the scoring runs on your machine. Saved versions live in your
+browser storage on your own device and one button deletes all of them.
+
+The server counts how many times each page was opened, so the project can answer how many
+people use it. That is one number per day. No IP address, no browser details, no cookie and
+no resume text. The page never sends anything to it, and the counts are public at `/stats`.
 
 The only outbound requests are the ones you trigger with the job feed, which reads public job
 board APIs. Turn it off and the page makes no network requests at all.

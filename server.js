@@ -24,6 +24,73 @@ try {
    still no directory listing and no stray file is exposed. */
 const ORG_PATHS = new Set(["/for-organizations", "/for-organizations/", "/organizations", "/organizations/"]);
 
+/* ----------------------------------------------------------------------
+   Visit counting.
+
+   Counted here on the server, from the request the browser already makes to
+   fetch the page. The page itself sends nothing back, so running an analysis
+   is still zero network calls and the privacy promise holds.
+
+   Stored: a running total and a count per day. That is the entire file.
+   Not stored: no IP address, no user agent, no referrer, no cookie, no
+   session, nothing tied to a person, and never any resume text.
+   ---------------------------------------------------------------------- */
+
+const DATA_DIR = fs.existsSync("/data") ? "/data" : __dirname;
+const STATS_FILE = path.join(DATA_DIR, "stats.json");
+const KEEP_DAYS = 400;
+
+let stats = { started: null, app: 0, organizations: 0, days: {} };
+let dirty = false;
+
+try {
+  const parsed = JSON.parse(fs.readFileSync(STATS_FILE, "utf8"));
+  if (parsed && typeof parsed === "object") stats = Object.assign(stats, parsed);
+} catch (e) {
+  /* first run, or an empty volume. Start fresh. */
+}
+if (!stats.started) { stats.started = new Date().toISOString().slice(0, 10); dirty = true; }
+
+function record(which) {
+  const d = new Date().toISOString().slice(0, 10);
+  stats[which] = (stats[which] || 0) + 1;
+  if (!stats.days[d]) stats.days[d] = { app: 0, organizations: 0 };
+  stats.days[d][which] = (stats.days[d][which] || 0) + 1;
+  dirty = true;
+}
+
+/* write at most once every 20 seconds, so a rush of traffic is not a rush of disk writes */
+setInterval(() => {
+  if (!dirty) return;
+  const keys = Object.keys(stats.days).sort();
+  while (keys.length > KEEP_DAYS) delete stats.days[keys.shift()];
+  try {
+    fs.writeFileSync(STATS_FILE, JSON.stringify(stats));
+    dirty = false;
+  } catch (e) {
+    /* read only disk. Keep counting in memory rather than falling over. */
+  }
+}, 20000).unref();
+
+function summary() {
+  const days = Object.keys(stats.days).sort();
+  const last = days.slice(-30);
+  const recent = last.reduce((a, d) =>
+    a + (stats.days[d].app || 0) + (stats.days[d].organizations || 0), 0);
+  return {
+    since: stats.started,
+    visits: {
+      app: stats.app,
+      organizations: stats.organizations,
+      total: stats.app + stats.organizations
+    },
+    last30Days: recent,
+    daysRecorded: days.length,
+    byDay: last.reduce((o, d) => { o[d] = stats.days[d]; return o; }, {}),
+    note: "Counted on the server from page requests. No IP addresses, user agents, cookies or resume data are stored."
+  };
+}
+
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",      // the engine is inlined in the page
@@ -36,11 +103,27 @@ const CSP = [
 ].join("; ");
 
 const server = http.createServer((req, res) => {
-  if (req.url === "/healthz") {
+  const url = req.url.split("?")[0];
+
+  if (url === "/healthz") {
     res.writeHead(200, { "content-type": "text/plain" });
     return res.end("ok");
   }
-  const body = ORG_PATHS.has(req.url.split("?")[0]) ? orgHtml : html;
+
+  /* the numbers are public, the same as the rubric is */
+  if (url === "/stats" || url === "/stats.json") {
+    res.writeHead(200, {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
+      "access-control-allow-origin": "*"
+    });
+    return res.end(JSON.stringify(summary(), null, 2));
+  }
+
+  const isOrg = ORG_PATHS.has(url);
+  const body = isOrg ? orgHtml : html;
+  if (req.method === "GET") record(isOrg ? "organizations" : "app");
+
   res.writeHead(200, {
     "content-type": "text/html; charset=utf-8",
     "content-length": body.length,
@@ -56,5 +139,6 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log("Resume Rubric listening on " + PORT +
-    " (app " + (html.length / 1024).toFixed(1) + " KB, organizations " + (orgHtml.length / 1024).toFixed(1) + " KB)");
+    " (app " + (html.length / 1024).toFixed(1) + " KB, organizations " + (orgHtml.length / 1024).toFixed(1) + " KB)" +
+    " counting to " + STATS_FILE);
 });

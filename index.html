@@ -402,6 +402,33 @@ select.sel:focus,input.inp:focus{outline:none;border-color:var(--accent-line)}
 .kwfit.empty{border-left-color:var(--border-strong);color:var(--faint)}
 .kwfit .tagl{display:block;font-family:var(--mono);font-size:.5625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.2rem}
 
+/* finish your resume: the three highest value steps in one place */
+.finish{border:1px solid var(--accent-line);border-radius:var(--r-sm);background:var(--surface-2);margin-bottom:1.5rem;overflow:hidden}
+.finish-top{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;background:linear-gradient(180deg,var(--accent-soft),transparent)}
+.finish-top h4{margin:0 0 .2rem;font-size:1.0625rem;letter-spacing:-.018em}
+.finish-top p{font-size:.8125rem;color:var(--muted);line-height:1.5}
+.finish-score{font-family:var(--mono);font-size:.6875rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-left:auto;white-space:nowrap}
+.finish-score b{display:block;font-size:1.6rem;font-family:var(--sans);letter-spacing:-.04em;color:var(--text);text-align:right;font-variant-numeric:tabular-nums}
+.fstep{border-top:1px solid var(--border)}
+.fstep:first-of-type{border-top:none}
+.fstep-h{display:flex;gap:.7rem;align-items:flex-start;padding:.9rem 1rem .6rem;flex-wrap:wrap}
+.fstep-n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--accent);color:var(--accent-ink);font-family:var(--mono);font-size:.6875rem;font-weight:700;margin-top:1px}
+.fstep-h h5{margin:0 0 .15rem;font-size:.9375rem;font-weight:600;letter-spacing:-.012em}
+.fstep-h p{font-size:.8125rem;color:var(--muted);line-height:1.5;max-width:62ch}
+.fstep-h p b{color:var(--text);font-weight:600}
+.fstep-pts{font-family:var(--mono);font-size:.75rem;color:var(--good);margin-left:auto;white-space:nowrap;font-weight:700}
+.fstep-foot{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;padding:.6rem 1rem .9rem}
+.fstep-note{font-size:.75rem;color:var(--faint);margin-left:auto}
+.fstep-more{font-size:.75rem;color:var(--faint);padding:0 1rem .9rem}
+.fstep .review-list{max-height:300px;overflow:auto;padding:0 .5rem .3rem}
+.fstep .kwlist{padding:0 1rem 1rem;gap:.6rem}
+.mlist{display:grid;gap:.6rem;padding:0 1rem 1rem}
+.mrow{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);padding:.7rem .8rem}
+.mtext{display:block;font-size:.875rem;line-height:1.5;color:var(--text);margin-bottom:.55rem}
+.mfill{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.mfill .mnum{flex:1;min-width:200px}
+@media(max-width:620px){.finish-score{margin-left:0}.finish-score b{text-align:left}.fstep-pts{margin-left:0}.fstep-note{margin-left:0;flex-basis:100%}}
+
 /* review and apply, shown before anything is written */
 .review{border:1px solid var(--accent-line);border-radius:var(--r-sm);background:var(--surface-2);margin-bottom:1.35rem;overflow:hidden}
 .review-h{display:flex;gap:1rem;align-items:flex-start;padding:.9rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
@@ -3063,7 +3090,7 @@ function renderKeywords(res){
         ? '<div class="kwfit empty">Too generic to drop into a sentence. Make sure the idea is present in your own words rather than inserting the word itself.</div>'
         : best
         ? '<div class="kwfit"><span class="tagl">Closest bullet, line '+(best.i+1)+'</span>'+esc(best.text)+'</div>'+
-          '<div class="ract no-print"><button class="btn btn-ghost btn-sm" data-act="place" data-line="'+(best.i+1)+'" data-term="'+esc(t.term)+'" data-pretty="'+esc(t.surface||"")+'">Add it to this bullet</button>'+
+          '<div class="ract no-print"><button class="btn btn-ghost btn-sm" data-act="place" data-line="'+(best.i+1)+'" data-term="'+esc(t.term)+'" data-pretty="'+esc(prettyTerm(t.term,t.surface))+'">Add it to this bullet</button>'+
           '<span class="tagchip">only if it is true</span></div>'
         : '<div class="kwfit empty">No bullet is close enough to place this honestly. If you have done it, it needs its own line.</div>')+
     '</div>';
@@ -4355,6 +4382,202 @@ function wireReview(plan, state){
   });
 }
 
+/* ---- finish your resume ----
+   The three things worth the most points, in one place and in order. Wording the tool can
+   fix itself, then your numbers, then their words. Nothing is written until you act on it. */
+
+function renderFinish(plan, res, state){
+  var doc = state.doc;
+  var applyable = plan.recs.filter(function(r){ return r.kind === "apply"; });
+  var keys = applyable.map(function(r){ return r.key; });
+  var ch = keys.length ? bulletChanges(state.text, keys) : {rows:[]};
+
+  var noMetric = doc.bullets.filter(function(b){ return !METRIC_RE.test(b.text); });
+  var placeable = (res.missing || []).filter(function(t){ return t.placeable && t.best; });
+  var prof = FIELDS[state.field] || FIELDS.general;
+
+  if(!ch.rows.length && !noMetric.length && !placeable.length) return "";
+
+  var stepNo = 0;
+  function head(title, note, count, pts){
+    stepNo++;
+    return '<div class="fstep-h"><span class="fstep-n">' + stepNo + '</span>' +
+      '<div><h5>' + esc(title) + '</h5><p>' + note + '</p></div>' +
+      (pts ? '<span class="fstep-pts">up to +' + pts + '</span>' : '') + '</div>';
+  }
+
+  var h = '<div class="finish" id="finishBox">' +
+    '<div class="finish-top">' +
+      '<div><h4>Finish your resume</h4>' +
+      '<p>Three steps, worth the most points first. You can stop after any of them.</p></div>' +
+      '<span class="finish-score">now <b id="fNow">' + plan.base + '</b></span>' +
+    '</div>';
+
+  /* step one, wording the engine can fix on its own */
+  if(ch.rows.length){
+    var gain1 = plan.appliedTotal - plan.base;
+    h += '<section class="fstep" id="fstep1">' +
+      head("Fix the wording", "Every line it wants to change is listed. Untick anything you disagree with.",
+           ch.rows.length, gain1 > 0 ? gain1 : null) +
+      '<div class="review-list">';
+    ch.rows.forEach(function(r){
+      h += '<label class="chg"><input type="checkbox" checked data-line="' + r.line + '">' +
+        '<span class="chg-body"><span class="chg-n">line ' + r.line + '</span>' +
+        '<span class="chg-before">' + esc(r.before) + '</span>' +
+        '<span class="chg-after">' + slots(esc(r.after)) + '</span></span></label>';
+    });
+    h += '</div><div class="fstep-foot no-print">' +
+      '<button class="btn btn-primary btn-sm" id="applyPicked">Apply the ticked changes</button>' +
+      '<button class="btn btn-ghost btn-sm" id="tickAll">Tick all</button>' +
+      '<button class="btn btn-ghost btn-sm" id="tickNone">Untick all</button>' +
+      '<span class="fstep-note">Undo is there if you change your mind.</span>' +
+      '</div></section>';
+  }
+
+  /* step two, the numbers only the person can supply */
+  if(noMetric.length){
+    var metricRec = plan.recs.filter(function(r){ return r.key === "metrics"; })[0];
+    h += '<section class="fstep" id="fstep2">' +
+      head("Add your numbers", "This is the biggest gain and the one thing the tool will not do for you. " +
+           "A figure you did not earn is a figure you cannot defend.",
+           noMetric.length, metricRec ? metricRec.gain : null) +
+      '<div class="mlist">';
+    noMetric.slice(0, 8).forEach(function(b){
+      h += '<div class="mrow" data-line="' + (b.i + 1) + '">' +
+        '<span class="chg-n">line ' + (b.i + 1) + '</span>' +
+        '<span class="mtext">' + esc(b.text) + '</span>' +
+        '<div class="mfill no-print">' +
+          '<input class="inp mnum" type="text" placeholder="' + esc(prof.hint) + '" aria-label="Number for line ' + (b.i + 1) + '">' +
+          '<button class="btn btn-ghost btn-sm" data-act="addnum">Add</button>' +
+        '</div></div>';
+    });
+    h += '</div>';
+    if(noMetric.length > 8) h += '<p class="fstep-more">' + (noMetric.length - 8) + ' more are in the bullet rewrites tab.</p>';
+    h += '</section>';
+  }
+
+  /* step three, their words placed inside real work */
+  if(placeable.length){
+    var kwRec = plan.recs.filter(function(r){ return r.key === "keywords"; })[0];
+    h += '<section class="fstep" id="fstep3">' +
+      head("Use their words", "Terms the posting leans on that your resume does not have. Each one is shown " +
+           "next to the bullet it fits best. <b>Only add what is already true of you.</b>",
+           placeable.length, kwRec ? kwRec.gain : null) +
+      '<div class="kwlist">';
+    placeable.slice(0, 6).forEach(function(t){
+      h += '<div class="kwrow">' +
+        '<div class="kwhead"><span class="chip miss">' + esc(t.term) + '<span class="w">' + t.n + 'x in the posting</span></span></div>' +
+        '<div class="kwfit"><span class="tagl">Closest bullet, line ' + (t.best.i + 1) + '</span>' + esc(t.best.text) + '</div>' +
+        '<div class="ract no-print">' +
+          '<button class="btn btn-ghost btn-sm" data-act="place" data-line="' + (t.best.i + 1) + '" data-term="' + esc(t.term) + '" data-pretty="' + esc(prettyTerm(t.term, t.surface)) + '">Add it to this bullet</button>' +
+          '<span class="tagchip">only if it is true</span>' +
+        '</div></div>';
+    });
+    h += '</div></section>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function wireFinish(plan, res, state){
+  var box = $("finishBox");
+  if(!box) return;
+
+  var applyable = plan.recs.filter(function(r){ return r.kind === "apply"; });
+  var keys = applyable.map(function(r){ return r.key; });
+  var ch = keys.length ? bulletChanges(state.text, keys) : {rows:[]};
+
+  function lines(){ return state.text.replace(/\r/g, "").split("\n"); }
+  function lead(l){ return (l.match(/^\s*[-•*·▪◦‣>⁃]?\s*/) || [""])[0]; }
+
+  /* ---- step one ---- */
+  var nowEl = $("fNow");
+  function scoreOfText(t){
+    var d = parseResume(t);
+    var terms = state.jd ? matchTerms(extractTerms(state.jd, state.field), t) : [];
+    return score(d, terms, state.field).total;
+  }
+  function picked(){
+    var p = {};
+    [].slice.call(box.querySelectorAll('#fstep1 input[type="checkbox"]')).forEach(function(c){
+      if(c.checked) p[+c.dataset.line] = true;
+    });
+    return p;
+  }
+  function candidate(){
+    var p = picked(), L = lines(), n = 0;
+    ch.rows.forEach(function(r){
+      if(!p[r.line]) return;
+      L[r.line - 1] = lead(L[r.line - 1]) + r.after;
+      n++;
+    });
+    return {text:L.join("\n"), n:n};
+  }
+  function refresh(){
+    var c = candidate();
+    if(nowEl) nowEl.textContent = c.n ? scoreOfText(c.text) : plan.base;
+    var go = $("applyPicked");
+    if(go) go.textContent = c.n ? ("Apply " + c.n + " change" + (c.n > 1 ? "s" : "")) : "Nothing ticked";
+  }
+  box.addEventListener("change", function(e){
+    if(e.target.type === "checkbox") refresh();
+  });
+  var ta = $("tickAll"), tn = $("tickNone");
+  function setAll(v){
+    [].slice.call(box.querySelectorAll('#fstep1 input[type="checkbox"]')).forEach(function(c){ c.checked = v; });
+    refresh();
+  }
+  if(ta) ta.addEventListener("click", function(){ setAll(true); });
+  if(tn) tn.addEventListener("click", function(){ setAll(false); });
+  var go = $("applyPicked");
+  if(go) go.addEventListener("click", function(){
+    var c = candidate();
+    if(!c.n){ toast("Nothing ticked"); return; }
+    mutateResume(c.text, c.n + " wording change" + (c.n > 1 ? "s" : ""));
+    toast("Applied " + c.n + " change" + (c.n > 1 ? "s" : ""));
+  });
+
+  /* ---- step two, add a number to one bullet ---- */
+  function addNumber(row){
+    var input = row.querySelector(".mnum");
+    var val = (input.value || "").trim();
+    if(!val){ toast("Type the number first"); input.focus(); return; }
+    var idx = +row.dataset.line - 1;
+    var L = lines();
+    var cur = L[idx];
+    if(cur === undefined) return;
+    var body = cur.trim().replace(/^[-•*·▪◦‣>⁃]\s*/, "").replace(/[.]$/, "");
+    L[idx] = lead(cur) + body + ", " + val.replace(/^[,\s]+/, "") + ".";
+    mutateResume(L.join("\n"), "number on line " + (idx + 1));
+    toast("Added to line " + (idx + 1));
+  }
+  [].slice.call(box.querySelectorAll(".mrow")).forEach(function(row){
+    var btn = row.querySelector('button[data-act="addnum"]');
+    if(btn) btn.addEventListener("click", function(){ addNumber(row); });
+    var inp = row.querySelector(".mnum");
+    if(inp) inp.addEventListener("keydown", function(e){
+      if(e.key === "Enter"){ e.preventDefault(); addNumber(row); }
+    });
+  });
+
+  /* ---- step three, place a term in the bullet it fits ---- */
+  [].slice.call(box.querySelectorAll('button[data-act="place"]')).forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var idx = +btn.dataset.line - 1;
+      var term = btn.dataset.pretty || btn.dataset.term;
+      var L = lines();
+      var cur = L[idx];
+      if(cur === undefined) return;
+      if(cur.toLowerCase().indexOf(term.toLowerCase()) >= 0){ toast("That line already says it"); return; }
+      var body = cur.trim().replace(/^[-•*·▪◦‣>⁃]\s*/, "").replace(/[.]$/, "");
+      L[idx] = lead(cur) + body + " (" + term + ").";
+      mutateResume(L.join("\n"), '"' + term + '" on line ' + (idx + 1));
+      toast('Added "' + term + '"');
+    });
+  });
+}
+
 /* -------------------------------------------------- samples */
 
 var SAMPLES=[
@@ -4549,15 +4772,16 @@ function run(){
       '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }).join("");
 
+  /* placement has to be worked out before the finish flow reads it */
+  suggestPlacement(res.missing,doc,j,field);
   var plan=buildPlan(doc,res,field,r,j);
   var planState={text:r,doc:doc,score:res.total,field:field,jd:j};
-  $("p-plan").innerHTML=renderReview(plan,planState)+renderPlan(plan);
-  wireReview(plan,planState);
+  $("p-plan").innerHTML=renderFinish(plan,res,planState)+renderPlan(plan);
+  wireFinish(plan,res,planState);
   $("bPlan").textContent=plan.recs.length;
   wirePlan(plan);
 
   $("p-findings").innerHTML=renderFindings(res);
-  suggestPlacement(res.missing,doc,j,field);
   $("p-keywords").innerHTML=renderKeywords(res);
   wireKeywords(res);
   $("p-rewrites").innerHTML=renderRewrites(rw,doc.bullets.length);

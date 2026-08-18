@@ -402,6 +402,25 @@ select.sel:focus,input.inp:focus{outline:none;border-color:var(--accent-line)}
 .kwfit.empty{border-left-color:var(--border-strong);color:var(--faint)}
 .kwfit .tagl{display:block;font-family:var(--mono);font-size:.5625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.2rem}
 
+/* review and apply, shown before anything is written */
+.review{border:1px solid var(--accent-line);border-radius:var(--r-sm);background:var(--surface-2);margin-bottom:1.35rem;overflow:hidden}
+.review-h{display:flex;gap:1rem;align-items:flex-start;padding:.9rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.review-h h5{margin:0 0 .2rem;font-size:.9375rem;font-weight:600;letter-spacing:-.012em}
+.review-h p{font-size:.8125rem;color:var(--muted);line-height:1.5;max-width:60ch}
+.review-gain{font-family:var(--mono);font-size:.9375rem;color:var(--muted);margin-left:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
+.review-gain b{color:var(--good);font-size:1.125rem}
+.review-list{max-height:340px;overflow:auto;padding:.35rem .5rem}
+.chg{display:grid;grid-template-columns:auto 1fr;gap:.65rem;padding:.55rem .5rem;border-radius:7px;cursor:pointer;align-items:start}
+.chg:hover{background:var(--surface-3)}
+.chg input{margin-top:.35rem;accent-color:var(--accent);width:15px;height:15px;flex:none;cursor:pointer}
+.chg-body{min-width:0;display:block}
+.chg-n{font-family:var(--mono);font-size:.625rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:.25rem}
+.chg-before{display:block;font-size:.8125rem;color:var(--faint);line-height:1.5;text-decoration:line-through;text-decoration-color:var(--bad);margin-bottom:.15rem}
+.chg-after{display:block;font-size:.875rem;color:var(--text);line-height:1.5}
+.review-foot{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;padding:.75rem 1rem;border-top:1px solid var(--border);background:var(--surface)}
+.review-note{font-size:.75rem;color:var(--faint);margin-left:auto}
+@media(max-width:620px){.review-gain{margin-left:0}.review-note{margin-left:0;flex-basis:100%}}
+
 /* action plan */
 .plan-top{
   display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;padding:.9rem 1rem;margin-bottom:1.1rem;
@@ -4217,6 +4236,125 @@ function wireExport(state){
   });
 }
 
+/* ---- review and apply ----
+   Shows every change before it happens, all ticked, one button to accept.
+   Nothing is written to the resume until the person presses the button. */
+
+function bulletChanges(text, keys){
+  /* run each fix on its own so we can show the person what each one did */
+  var before = parseResume(text).bullets.map(function(b){ return {i:b.i, text:b.text}; });
+  var after = text;
+  keys.forEach(function(k){ if(FIXES[k]) after = FIXES[k].apply(after); });
+  var afterMap = {};
+  parseResume(after).bullets.forEach(function(b){ afterMap[b.i] = b.text; });
+
+  var rows = [];
+  before.forEach(function(b){
+    var now = afterMap[b.i];
+    if(now !== undefined && now !== b.text) rows.push({line:b.i+1, before:b.text, after:now});
+  });
+  return {rows:rows, text:after};
+}
+
+function renderReview(plan, state){
+  var applyable = plan.recs.filter(function(r){ return r.kind === "apply"; });
+  if(!applyable.length) return "";
+
+  var keys = applyable.map(function(r){ return r.key; });
+  var ch = bulletChanges(state.text, keys);
+  if(!ch.rows.length) return "";
+
+  var h = '<div class="review" id="reviewBox">' +
+    '<div class="review-h">' +
+      '<div><h5>' + ch.rows.length + ' line' + (ch.rows.length>1?"s":"") + ' can be fixed right now</h5>' +
+      '<p>Every change is listed below. Untick anything you disagree with. Nothing is written until you press the button.</p></div>' +
+      '<span class="review-gain">' + plan.base + ' &rarr; <b>' + plan.appliedTotal + '</b></span>' +
+    '</div>' +
+    '<div class="review-list">';
+
+  ch.rows.forEach(function(r, i){
+    h += '<label class="chg">' +
+      '<input type="checkbox" checked data-line="' + r.line + '">' +
+      '<span class="chg-body">' +
+        '<span class="chg-n">line ' + r.line + '</span>' +
+        '<span class="chg-before">' + esc(r.before) + '</span>' +
+        '<span class="chg-after">' + slots(esc(r.after)) + '</span>' +
+      '</span></label>';
+  });
+
+  h += '</div>' +
+    '<div class="review-foot no-print">' +
+      '<button class="btn btn-primary btn-sm" id="applyPicked">Apply the ticked changes</button>' +
+      '<button class="btn btn-ghost btn-sm" id="tickAll">Tick all</button>' +
+      '<button class="btn btn-ghost btn-sm" id="tickNone">Untick all</button>' +
+      '<span class="review-note">You can undo this afterwards.</span>' +
+    '</div></div>';
+  return h;
+}
+
+function wireReview(plan, state){
+  var box = $("reviewBox");
+  if(!box) return;
+  var keys = plan.recs.filter(function(r){ return r.kind === "apply"; }).map(function(r){ return r.key; });
+  var ch = bulletChanges(state.text, keys);
+
+  /* the projected score must follow what is actually ticked, or it lies the moment
+     someone unticks a line */
+  var gainEl = box.querySelector(".review-gain");
+  function candidateText(){
+    var picked={};
+    [].slice.call(box.querySelectorAll("input[type=\"checkbox\"]")).forEach(function(c){
+      if(c.checked) picked[+c.dataset.line]=true;
+    });
+    var lines=state.text.replace(/\r/g,"").split("\n");
+    ch.rows.forEach(function(r){
+      if(!picked[r.line]) return;
+      var idx=r.line-1;
+      var lead=(lines[idx].match(/^\s*[-•*·▪◦‣>⁃]?\s*/)||[""])[0];
+      lines[idx]=lead+r.after;
+    });
+    return {text:lines.join("\n"), n:Object.keys(picked).length};
+  }
+  function refreshGain(){
+    var c=candidateText();
+    var d=parseResume(c.text);
+    var terms=state.jd?matchTerms(extractTerms(state.jd,state.field),c.text):[];
+    var sc=score(d,terms,state.field).total;
+    if(gainEl) gainEl.innerHTML=state.score+" &rarr; <b>"+sc+"</b>";
+    var go=$("applyPicked");
+    if(go) go.textContent=c.n?("Apply "+c.n+" change"+(c.n>1?"s":"")):"Nothing ticked";
+  }
+  box.addEventListener("change",function(e){ if(e.target.type==="checkbox") refreshGain(); });
+
+  function setAll(v){
+    [].slice.call(box.querySelectorAll('input[type="checkbox"]')).forEach(function(c){ c.checked = v; });
+  }
+  var ta = $("tickAll"), tn = $("tickNone");
+  if(ta) ta.addEventListener("click", function(){ setAll(true); refreshGain(); });
+  if(tn) tn.addEventListener("click", function(){ setAll(false); refreshGain(); });
+
+  var go = $("applyPicked");
+  if(go) go.addEventListener("click", function(){
+    var picked = {};
+    [].slice.call(box.querySelectorAll('input[type="checkbox"]')).forEach(function(c){
+      if(c.checked) picked[+c.dataset.line] = true;
+    });
+    var n = Object.keys(picked).length;
+    if(!n){ toast("Nothing ticked"); return; }
+
+    /* apply only the lines that are still ticked */
+    var lines = state.text.replace(/\r/g,"").split("\n");
+    ch.rows.forEach(function(r){
+      if(!picked[r.line]) return;
+      var idx = r.line - 1;
+      var lead = (lines[idx].match(/^\s*[-•*·▪◦‣>⁃]?\s*/) || [""])[0];
+      lines[idx] = lead + r.after;
+    });
+    mutateResume(lines.join("\n"), n + " line" + (n>1?"s":""));
+    toast("Applied " + n + " change" + (n>1?"s":""));
+  });
+}
+
 /* -------------------------------------------------- samples */
 
 var SAMPLES=[
@@ -4285,7 +4423,8 @@ function handleFile(file){
         ". That is worth knowing rather than working around, because an applicant tracking system reads the file the same way this did. "+
         "Fix the layout in your editor, or paste the text below and compare.");
     }
-    if(resEl.classList.contains("on")) run();
+    /* reading a file changes nothing, so there is no reason to make people press Analyze */
+    run();
   }).catch(function(e){
     importNote("bad",esc(e.message||"That file could not be read."));
   });
@@ -4411,7 +4550,9 @@ function run(){
   }).join("");
 
   var plan=buildPlan(doc,res,field,r,j);
-  $("p-plan").innerHTML=renderPlan(plan);
+  var planState={text:r,doc:doc,score:res.total,field:field,jd:j};
+  $("p-plan").innerHTML=renderReview(plan,planState)+renderPlan(plan);
+  wireReview(plan,planState);
   $("bPlan").textContent=plan.recs.length;
   wirePlan(plan);
 

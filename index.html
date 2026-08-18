@@ -4097,6 +4097,10 @@ function renderExport(state){
       '<div class="stat"><b>'+wordCount(state.text)+'</b><span>Words</span></div>'+
       '<div class="stat"><b>'+state.score+'</b><span>Current score</span></div>'+
     '</div>'+
+    (window.self!==window.top
+      ? '<div class="ws-note" style="border-color:var(--accent)"><span>You are viewing this inside an embedded frame, which blocks file downloads. '+
+        'Use <b>Print or save as PDF</b> below, or open the live site to download the .docx.</span></div>'
+      : "")+
     '<div class="ws-bar no-print">'+
       '<button class="btn btn-primary btn-sm" id="dlDocx">Download .docx</button>'+
       '<button class="btn btn-ghost btn-sm" id="printResume">Print or save as PDF</button>'+

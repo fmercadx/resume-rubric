@@ -1,4 +1,4 @@
-/* Shortlist static host.
+/* Resume Rubric static host.
    No dependencies, matching the app itself. The whole product is one HTML file, so every
    route serves that file and nothing else is reachable: no directory listing, no stray
    files. Resume data never reaches this server, because the engine runs in the browser. */
@@ -48,5 +48,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log("Shortlist listening on " + PORT + " (" + (html.length / 1024).toFixed(1) + " KB)");
+  console.log("Resume Rubric listening on " + PORT + " (" + (html.length / 1024).toFixed(1) + " KB)");
 });

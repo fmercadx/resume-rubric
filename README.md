@@ -1,9 +1,9 @@
-# Shortlist
+# Resume Rubric
 
 A resume engine that scores, rewrites, and tracks a job search, running entirely in the
 browser. One HTML file, no framework, no build step, no dependencies.
 
-**Live:** https://shortlist-production-95ce.up.railway.app
+**Live:** https://resume-rubric-production.up.railway.app
 
 ## What it does
 
@@ -51,7 +51,7 @@ some browsers block local storage on `file://`, so saved versions may not persis
 |------|---------|
 | `index.html` | The entire application: markup, styles, and engine |
 | `server.js` | Zero-dependency static host. Every route serves the app |
-| `shortlist-artifact.html` | The same page without its document wrapper, for embedding |
+| `resume-rubric-artifact.html` | The same page without its document wrapper, for embedding |
 
 ## Deploying
 

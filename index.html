@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shortlist: the resume engine that shows its work</title>
+<title>Resume Rubric: the resume engine that shows its work</title>
 <meta name="description" content="Score your resume against any job posting in seconds. Real ATS analysis, honest rewrites, no invented numbers. Works for every field. Your resume never leaves your browser.">
 <style>
 /* ============================================================
@@ -764,8 +764,27 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
 }
 .linkish:hover{text-decoration-thickness:2px}
 
+/* printing just the resume, not the report */
+#printResumeHost{display:none}
+body.printing-resume #printResumeHost{
+  display:block;font-family:Calibri,Carlito,"Helvetica Neue",Arial,sans-serif;color:#000;
+}
+#printResumeHost h2{
+  font-size:11.5pt;font-weight:700;letter-spacing:.06em;margin:14pt 0 4pt;
+  border-bottom:.75pt solid #000;padding-bottom:2pt;text-transform:uppercase;
+}
+#printResumeHost p{font-size:10.5pt;line-height:1.35;margin:0 0 4pt}
+#printResumeHost p.nm{font-size:16pt;font-weight:700;margin-bottom:2pt;letter-spacing:-.01em}
+#printResumeHost ul{margin:0 0 6pt;padding-left:15pt}
+#printResumeHost li{font-size:10.5pt;line-height:1.35;margin-bottom:2.5pt}
+
 /* print */
 @media print{
+  body.printing-resume > *:not(#printResumeHost){display:none!important}
+  body.printing-resume{background:#fff}
+  body.printing-resume #printResumeHost{display:block!important;padding:0}
+  @page{margin:0.75in}
+
   body{background:#fff;color:#000}
   /* the PDF is the report, not the marketing page: hide every section, then bring back the analyzer */
   body::before,.nav,.hero,.no-print,footer,.tabs,.an-bar,.an-grid,.an-run,.sec,.fig{display:none!important}
@@ -789,12 +808,12 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
 <!-- ===================== NAV ===================== -->
 <nav class="nav no-print">
   <div class="wrap nav-in">
-    <a href="#top" class="brand" aria-label="Shortlist home">
+    <a href="#top" class="brand" aria-label="Resume Rubric home">
       <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <rect x="1" y="1" width="22" height="22" rx="6" fill="var(--accent)"/>
         <path d="M6.5 12.2l3.2 3.3 7.8-7.4" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      shortlist<span style="color:var(--accent)">.</span>
+      resume rubric<span style="color:var(--accent)">.</span>
     </a>
     <div class="nav-links">
       <a class="nlink" href="#analyzer">Analyzer</a>
@@ -827,7 +846,7 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
         </span>
       </h1>
       <p class="hero-sub">
-        Paste your resume and the job posting. Shortlist scores it on the same six things a recruiter screen actually checks, cites the exact line behind every finding, and rewrites your weakest bullets. It will never put a number on your resume that you did not earn.
+        Paste your resume and the job posting. Resume Rubric scores it on the same six things a recruiter screen actually checks, cites the exact line behind every finding, and rewrites your weakest bullets. It will never put a number on your resume that you did not earn.
       </p>
       <div class="hero-cta">
         <a href="#analyzer" class="btn btn-primary">Run a real analysis <span class="arrow">&rarr;</span></a>
@@ -844,7 +863,7 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
       <div class="hero-card">
         <div class="hc-top">
           <div class="hc-dots"><i></i><i></i><i></i></div>
-          <span class="fig">SHORTLIST / REPORT.v1</span>
+          <span class="fig">RESUME RUBRIC / REPORT.v1</span>
         </div>
         <div class="hc-body">
           <div class="hc-row">
@@ -977,6 +996,7 @@ Include the responsibilities and the requirements sections. The more of the post
           <button class="tab" role="tab" aria-selected="false" data-panel="p-rewrites">Bullet rewrites <span class="badge" id="bRw">0</span></button>
           <button class="tab" role="tab" aria-selected="false" data-panel="p-diff">Side by side</button>
           <button class="tab" role="tab" aria-selected="false" data-panel="p-letter">Cover letter</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="p-export">Export</button>
         </div>
 
         <div class="panel on" id="p-plan" role="tabpanel" data-title="Action plan"></div>
@@ -985,6 +1005,7 @@ Include the responsibilities and the requirements sections. The more of the post
         <div class="panel" id="p-rewrites" role="tabpanel" data-title="Bullet rewrites"></div>
         <div class="panel" id="p-diff" role="tabpanel" data-title="Original vs rewritten"></div>
         <div class="panel" id="p-letter" role="tabpanel" data-title="Cover letter draft"></div>
+        <div class="panel" id="p-export" role="tabpanel" data-title="Export"></div>
       </div>
     </div>
 
@@ -1041,7 +1062,7 @@ Include the responsibilities and the requirements sections. The more of the post
         <span class="sn">01 / 05</span>
         <div>
           <h3>Read</h3>
-          <p>Shortlist splits your resume into a contact block, section headers, roles, and individual bullets. Anything it cannot parse is exactly what an applicant tracking system cannot parse either, so it gets flagged first.</p>
+          <p>Resume Rubric splits your resume into a contact block, section headers, roles, and individual bullets. Anything it cannot parse is exactly what an applicant tracking system cannot parse either, so it gets flagged first.</p>
         </div>
         <ul>
           <li>Detects sections even when your headers are unconventional</li>
@@ -1195,7 +1216,7 @@ Include the responsibilities and the requirements sections. The more of the post
     <div class="tbl-wrap compare">
       <table>
         <thead>
-          <tr><th>&nbsp;</th><th>Shortlist</th><th>Typical AI resume tool</th></tr>
+          <tr><th>&nbsp;</th><th>Resume Rubric</th><th>Typical AI resume tool</th></tr>
         </thead>
         <tbody>
           <tr><td><strong>Your resume leaves your device</strong></td><td><span class="no">Never</span><small>Scoring, rewriting, and matching all happen in this tab. The job feed fetches postings inward and sends nothing out about you.</small></td><td><span class="yes">Yes</span><small>Uploaded, stored, and often used as training data.</small></td></tr>
@@ -1279,11 +1300,11 @@ Include the responsibilities and the requirements sections. The more of the post
       </details>
       <details class="qa">
         <summary>How can it score anything without an AI model?</summary>
-        <p>Because most of what an applicant tracking system does is not intelligent. It matches keywords, checks for parseable structure, and ranks. Shortlist reproduces that mechanically, then applies the writing rules that human recruiters have used for decades: lead with a verb, attach a number, cut the filler. A deterministic engine has a real advantage here, which is that it can show you exactly why it took a point off.</p>
+        <p>Because most of what an applicant tracking system does is not intelligent. It matches keywords, checks for parseable structure, and ranks. Resume Rubric reproduces that mechanically, then applies the writing rules that human recruiters have used for decades: lead with a verb, attach a number, cut the filler. A deterministic engine has a real advantage here, which is that it can show you exactly why it took a point off.</p>
       </details>
       <details class="qa">
         <summary>Why will it not write metrics into my bullets?</summary>
-        <p>Because you have to sit in the interview afterward. A tool that turns "managed the schedule" into "managed the schedule, reducing overtime 34%" has just written a claim you cannot defend. Shortlist marks the slot, tells you what kind of figure belongs there, and stops. The blank is the point.</p>
+        <p>Because you have to sit in the interview afterward. A tool that turns "managed the schedule" into "managed the schedule, reducing overtime 34%" has just written a claim you cannot defend. Resume Rubric marks the slot, tells you what kind of figure belongs there, and stops. The blank is the point.</p>
       </details>
       <details class="qa">
         <summary>Will the rewritten bullets sound like a machine wrote them?</summary>
@@ -1303,7 +1324,7 @@ Include the responsibilities and the requirements sections. The more of the post
       </details>
       <details class="qa">
         <summary>Is the score the same thing a real ATS would give me?</summary>
-        <p>No, and be suspicious of anyone claiming otherwise. Workday, Greenhouse, Taleo, and iCIMS each rank differently, and none of them publish their formula. What Shortlist scores is the set of things every one of them is known to check, plus the writing standards a human applies after the machine passes you through. Treat it as a rehearsal, not a verdict.</p>
+        <p>No, and be suspicious of anyone claiming otherwise. Workday, Greenhouse, Taleo, and iCIMS each rank differently, and none of them publish their formula. What Resume Rubric scores is the set of things every one of them is known to check, plus the writing standards a human applies after the machine passes you through. Treat it as a rehearsal, not a verdict.</p>
       </details>
     </div>
   </div>
@@ -1319,7 +1340,7 @@ Include the responsibilities and the requirements sections. The more of the post
             <rect x="1" y="1" width="22" height="22" rx="6" fill="var(--accent)"/>
             <path d="M6.5 12.2l3.2 3.3 7.8-7.4" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          shortlist<span style="color:var(--accent)">.</span>
+          resume rubric<span style="color:var(--accent)">.</span>
         </a>
         <p style="font-size:.875rem;color:var(--muted);max-width:34ch;line-height:1.6">
           A resume engine that runs on your machine, shows its rubric, and refuses to make things up on your behalf.
@@ -1353,7 +1374,7 @@ Include the responsibilities and the requirements sections. The more of the post
       </div>
     </div>
     <div class="f-bot">
-      <span>&copy; 2026 Shortlist</span>
+      <span>&copy; 2026 Resume Rubric</span>
       <span id="engineStat">Engine v1.1 &middot; your resume stays local</span>
     </div>
   </div>
@@ -1363,7 +1384,7 @@ Include the responsibilities and the requirements sections. The more of the post
 
 <script>
 /* ==========================================================================
-   SHORTLIST ENGINE v1.0
+   RESUME RUBRIC ENGINE v1.0
    Deterministic, offline resume analysis. No network, no dependencies.
    ========================================================================== */
 (function(){
@@ -1777,6 +1798,138 @@ function importFile(file){
   if(/\.doc$/.test(name))  return reject("Old .doc files are a binary format this cannot read. Save as .docx or PDF and try again.");
   if(/\.(pages|odt)$/.test(name)) return reject("That format is not supported. Export to PDF or .docx first.");
   return reject("Unsupported file. Use PDF, .docx, or plain text.");
+}
+
+/* -------------------------------------------------- document export
+   A .docx is a zip of XML. Entries are written STORED (uncompressed) so no compression
+   API is required and the result is valid everywhere. The layout is deliberately plain:
+   one column, no tables, no text boxes, no headers or footers, standard fonts. Those are
+   exactly the features that break resume parsers.
+   -------------------------------------------------- */
+
+var CRC_TABLE=(function(){
+  var t=new Uint32Array(256);
+  for(var n=0;n<256;n++){
+    var c=n;
+    for(var k=0;k<8;k++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);
+    t[n]=c>>>0;
+  }
+  return t;
+})();
+function crc32(bytes){
+  var c=0xFFFFFFFF;
+  for(var i=0;i<bytes.length;i++) c=CRC_TABLE[(c^bytes[i])&0xFF]^(c>>>8);
+  return (c^0xFFFFFFFF)>>>0;
+}
+
+function zipStored(files){
+  var enc=new TextEncoder(), parts=[], central=[], offset=0;
+  function u16(v){ return [v&0xFF,(v>>>8)&0xFF]; }
+  function u32(v){ return [v&0xFF,(v>>>8)&0xFF,(v>>>16)&0xFF,(v>>>24)&0xFF]; }
+  files.forEach(function(f){
+    var name=enc.encode(f.name), data=enc.encode(f.data), crc=crc32(data);
+    var local=[].concat([0x50,0x4B,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),
+                        u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0));
+    parts.push(new Uint8Array(local),name,data);
+    central.push({name:name,crc:crc,size:data.length,offset:offset});
+    offset+=local.length+name.length+data.length;
+  });
+  var cdStart=offset, cd=[];
+  central.forEach(function(e){
+    var h=[].concat([0x50,0x4B,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
+                    u32(e.crc),u32(e.size),u32(e.size),u16(e.name.length),
+                    u16(0),u16(0),u16(0),u16(0),u32(0),u32(e.offset));
+    cd.push(new Uint8Array(h),e.name);
+    offset+=h.length+e.name.length;
+  });
+  var eocd=new Uint8Array([].concat([0x50,0x4B,0x05,0x06],u16(0),u16(0),
+    u16(central.length),u16(central.length),u32(offset-cdStart),u32(cdStart),u16(0)));
+  return new Blob(parts.concat(cd,[eocd]),
+    {type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+}
+
+function xmlEsc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+                  .replace(/"/g,"&quot;").replace(/'/g,"&apos;");
+}
+
+/* rebuild the resume text into a structured document the exporter can lay out */
+function documentModel(text){
+  var doc=parseResume(text);
+  var bulletAt={}, headerAt={};
+  doc.bullets.forEach(function(b){ bulletAt[b.i]=b.text; });
+  doc.headers.forEach(function(h){ headerAt[h.i]=h.text; });
+  var lines=text.replace(/\r/g,"").split("\n");
+  var blocks=[];
+  lines.forEach(function(l,i){
+    var t=l.trim();
+    if(!t) return;
+    if(headerAt[i]!==undefined){ blocks.push({kind:"h",text:t.replace(/[:\s]+$/,"")}); return; }
+    if(bulletAt[i]!==undefined){ blocks.push({kind:"li",text:bulletAt[i]}); return; }
+    blocks.push({kind:"p",text:t});
+  });
+  return {blocks:blocks,doc:doc};
+}
+
+function docxFromModel(model){
+  function para(txt,opts){
+    opts=opts||{};
+    var rPr="";
+    if(opts.bold||opts.size) rPr="<w:rPr>"+(opts.bold?"<w:b/>":"")+(opts.size?'<w:sz w:val="'+opts.size+'"/>':"")+"</w:rPr>";
+    var pPr="<w:pPr>"+
+      '<w:spacing w:before="'+(opts.before||0)+'" w:after="'+(opts.after||60)+'" w:line="240" w:lineRule="auto"/>'+
+      (opts.ind?'<w:ind w:left="360" w:hanging="180"/>':"")+
+      (opts.outline?'<w:outlineLvl w:val="0"/>':"")+
+      "</w:pPr>";
+    return "<w:p>"+pPr+"<w:r>"+rPr+'<w:t xml:space="preserve">'+xmlEsc(txt)+"</w:t></w:r></w:p>";
+  }
+  var body="";
+  model.blocks.forEach(function(b,i){
+    if(b.kind==="h") body+=para(b.text.toUpperCase(),{bold:true,size:24,before:220,after:80,outline:true});
+    else if(b.kind==="li") body+=para("• "+b.text,{ind:true,after:40});
+    else body+=para(b.text,{bold:i===0,size:i===0?30:22,after:i===0?40:60});
+  });
+
+  var docXml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'+
+    "<w:body>"+body+
+    '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/>'+
+    '<w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080" w:header="0" w:footer="0" w:gutter="0"/>'+
+    "</w:sectPr></w:body></w:document>";
+
+  var contentTypes='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+    '<Default Extension="xml" ContentType="application/xml"/>'+
+    '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'+
+    '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>'+
+    "</Types>";
+
+  var rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'+
+    "</Relationships>";
+
+  var docRels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'+
+    "</Relationships>";
+
+  var styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+    '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'+
+    "<w:docDefaults><w:rPrDefault><w:rPr>"+
+    '<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="22"/>'+
+    "</w:rPr></w:rPrDefault></w:docDefaults>"+
+    '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>'+
+    "</w:styles>";
+
+  return zipStored([
+    {name:"[Content_Types].xml",data:contentTypes},
+    {name:"_rels/.rels",data:rels},
+    {name:"word/document.xml",data:docXml},
+    {name:"word/_rels/document.xml.rels",data:docRels},
+    {name:"word/styles.xml",data:styles}
+  ]);
 }
 
 /* -------------------------------------------------- resume parsing */
@@ -2697,9 +2850,17 @@ function interviewQuestions(doc,res,field){
 
 /* -------------------------------------------------- storage */
 
-var STORE_KEY="shortlist.v1";
+var STORE_KEY="resumerubric.v1", LEGACY_STORE_KEY="shortlist.v1";
 var memFallback=null, storageOK=true;
 
+/* anyone who used the tool under its previous name keeps their workspace */
+function migrateLegacyStore(){
+  try{
+    if(localStorage.getItem(STORE_KEY)) return;
+    var old=localStorage.getItem(LEGACY_STORE_KEY);
+    if(old){ localStorage.setItem(STORE_KEY,old); localStorage.removeItem(LEGACY_STORE_KEY); }
+  }catch(e){}
+}
 function dbRead(){
   if(memFallback) return memFallback;
   try{
@@ -2771,6 +2932,7 @@ function seedDB(){
   };
 }
 
+migrateLegacyStore();
 var DB=dbRead();
 if(!DB){ DB=seedDB(); dbWrite(DB); }
 if(!DB.versions) DB.versions=[];
@@ -3859,7 +4021,7 @@ function renderData(){
       DB=next; DB.versions=DB.versions||[]; DB.apps=DB.apps||[]; DB.history=DB.history||[];
       if(!DB.sources) DB.sources=freshSources();
       dbWrite(DB); renderAll(); toast("Workspace restored");
-    }catch(e){ toast("That does not look like a Shortlist backup"); }
+    }catch(e){ toast("That does not look like a Resume Rubric backup"); }
   });
   $("wipeAll").addEventListener("click",function(){
     if(!confirm("Delete every saved version, application, history point, and fetched job on this device? This cannot be undone.")) return;
@@ -3914,6 +4076,118 @@ function trackApplication(){
   DB.history.push({at:Date.now(),score:lastRun.res.total,cats:cats,label:ver?ver.label:company.trim()});
   dbWrite(DB); renderAll(); toast("Tracked "+company.trim());
   $("workspace").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ---- export, with a round trip proof ----
+   The generated .docx is fed straight back through the same reader an applicant tracking
+   system would need, then rescored. If the score survives the round trip, the export is
+   demonstrably parseable rather than merely claimed to be. */
+
+function renderExport(state){
+  var m=documentModel(state.text);
+  var counts={h:0,li:0,p:0};
+  m.blocks.forEach(function(b){counts[b.kind]++;});
+  return '<p style="font-size:.9375rem;color:var(--muted);max-width:66ch;line-height:1.6;margin-bottom:1.25rem">'+
+      'A clean copy of your resume as it stands in the editor above, laid out the way resume parsers '+
+      'cope with best: one column, no tables, no text boxes, no headers or footers, standard fonts. '+
+      'Then it is read back in and rescored, so you can see for yourself that the file survives parsing.</p>'+
+    '<div class="stat-row" style="margin-bottom:1.25rem">'+
+      '<div class="stat"><b>'+counts.h+'</b><span>Sections</span></div>'+
+      '<div class="stat"><b>'+counts.li+'</b><span>Bullets</span></div>'+
+      '<div class="stat"><b>'+wordCount(state.text)+'</b><span>Words</span></div>'+
+      '<div class="stat"><b>'+state.score+'</b><span>Current score</span></div>'+
+    '</div>'+
+    '<div class="ws-bar no-print">'+
+      '<button class="btn btn-primary btn-sm" id="dlDocx">Download .docx</button>'+
+      '<button class="btn btn-ghost btn-sm" id="printResume">Print or save as PDF</button>'+
+      '<button class="btn btn-ghost btn-sm" id="verifyRt">Verify it parses</button>'+
+    '</div>'+
+    '<div id="rtResult"></div>'+
+    '<p style="font-size:.75rem;color:var(--faint);line-height:1.6;max-width:66ch;margin-top:1.1rem">'+
+      'The file is built in this tab and never uploaded. If your browser blocks the download, '+
+      'use print, or copy the text from the editor above.</p>';
+}
+
+function wireExport(state){
+  var dl=$("dlDocx");
+  if(dl) dl.addEventListener("click",function(){
+    try{
+      var blob=docxFromModel(documentModel(state.text));
+      var name=(state.doc.name||"resume").replace(/[^A-Za-z0-9]+/g,"_")+".docx";
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement("a");
+      a.href=url; a.download=name; document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },1500);
+      toast("Built "+name+", "+(blob.size/1024).toFixed(1)+" KB");
+    }catch(e){ toast("Could not build the file: "+e.message); }
+  });
+
+  var pr=$("printResume");
+  if(pr) pr.addEventListener("click",function(){
+    var m=documentModel(state.text);
+    var host=document.createElement("div");
+    host.id="printResumeHost";
+    host.innerHTML=m.blocks.map(function(b,i){
+      if(b.kind==="h") return "<h2>"+esc(b.text.toUpperCase())+"</h2>";
+      if(b.kind==="li") return "<li>"+esc(b.text)+"</li>";
+      return "<p"+(i===0?' class="nm"':"")+">"+esc(b.text)+"</p>";
+    }).join("").replace(/(<li>.*?<\/li>)+/g,function(x){return "<ul>"+x+"</ul>";});
+    document.body.appendChild(host);
+    document.body.classList.add("printing-resume");
+    var cleanup=function(){
+      document.body.classList.remove("printing-resume");
+      host.remove();
+      window.removeEventListener("afterprint",cleanup);
+    };
+    window.addEventListener("afterprint",cleanup);
+    window.print();
+    setTimeout(cleanup,60000);
+  });
+
+  var vf=$("verifyRt");
+  if(vf) vf.addEventListener("click",function(){
+    var out=$("rtResult");
+    out.innerHTML='<div class="ws-note"><span>Building the file and reading it back…</span></div>';
+    var blob;
+    try{ blob=docxFromModel(documentModel(state.text)); }
+    catch(e){ out.innerHTML='<div class="ws-note" style="border-color:var(--bad)"><span>Could not build the file: '+esc(e.message)+'</span></div>'; return; }
+
+    blob.arrayBuffer().then(function(ab){
+      return readDocx(new Uint8Array(ab));
+    }).then(function(reText){
+      var reDoc=parseResume(reText);
+      var terms=state.jd?matchTerms(extractTerms(state.jd,state.field),reText):[];
+      var reScore=score(reDoc,terms,state.field);
+      var delta=reScore.total-state.score;
+      var ok=delta>=0;
+      var rows=[
+        ["Score",state.score,reScore.total],
+        ["Bullets found",state.doc.bullets.length,reDoc.bullets.length],
+        ["Sections found",state.doc.sections.length,reDoc.sections.length],
+        ["Email detected",state.doc.contact.email?"yes":"no",reDoc.contact.email?"yes":"no"],
+        ["Phone detected",state.doc.contact.phone?"yes":"no",reDoc.contact.phone?"yes":"no"],
+        ["Words",wordCount(state.text),wordCount(reText)]
+      ];
+      out.innerHTML=
+        '<div class="ws-note" style="border-color:'+(ok?"var(--good)":"var(--bad)")+'"><span>'+
+          (ok
+            ? "<b>The export parses cleanly.</b> The generated file was read back through the same reader and scored <b>"+reScore.total+"</b>"+
+              (delta===0?", identical to the original." : ", "+delta+" points higher than the original, because the export normalises the layout.")
+            : "<b>The round trip lost "+Math.abs(delta)+" points.</b> Something in this resume does not survive being written and read back, which is worth knowing before an employer's parser tries it.")+
+        '</span></div>'+
+        '<div class="tbl-wrap" style="margin-top:1rem"><table><thead><tr>'+
+          '<th>Checked</th><th>In the editor</th><th>After the round trip</th><th>&nbsp;</th></tr></thead><tbody>'+
+        rows.map(function(r){
+          var same=String(r[1])===String(r[2]);
+          return "<tr><td><strong>"+r[0]+"</strong></td><td>"+esc(String(r[1]))+"</td><td>"+esc(String(r[2]))+"</td>"+
+                 '<td class="'+(same?"yes":"no")+'">'+(same?"same":"differs")+"</td></tr>";
+        }).join("")+
+        "</tbody></table></div>";
+      toast(ok?"Round trip passed":"Round trip lost points");
+    }).catch(function(e){
+      out.innerHTML='<div class="ws-note" style="border-color:var(--bad)"><span>Could not read the file back: '+esc(e.message)+'</span></div>';
+    });
+  });
 }
 
 /* -------------------------------------------------- samples */
@@ -4122,6 +4396,9 @@ function run(){
   wireRewrites(rw);
   $("p-diff").innerHTML=renderDiff(doc.lines,next);
   $("p-letter").innerHTML=renderLetter(letter);
+  var exportState={text:r,doc:doc,score:res.total,field:field,jd:j};
+  $("p-export").innerHTML=renderExport(exportState);
+  wireExport(exportState);
 
   $("bFind").textContent=res.findings.length;
   $("bKey").textContent=res.terms.filter(function(t){return !t.hit;}).length;
@@ -4185,10 +4462,10 @@ function syncIcon(){ $("themeIcon").innerHTML=current()==="dark"?moon:sun; }
 function setTheme(t){
   document.documentElement.setAttribute("data-theme",t);
   syncIcon();
-  try{localStorage.setItem("shortlist-theme",t);}catch(e){}
+  try{localStorage.setItem("resumerubric-theme",t);}catch(e){}
 }
 /* only stamp the root when the viewer has actually chosen; otherwise the CSS default stands */
-var saved=null; try{saved=localStorage.getItem("shortlist-theme");}catch(e){}
+var saved=null; try{saved=localStorage.getItem("resumerubric-theme")||localStorage.getItem("shortlist-theme");}catch(e){}
 if(saved) setTheme(saved); else syncIcon();
 window.matchMedia("(prefers-color-scheme: light)").addEventListener("change",function(){
   if(!document.documentElement.getAttribute("data-theme")) syncIcon();

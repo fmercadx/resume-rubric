@@ -53,6 +53,11 @@ some browsers block local storage on `file://`, so saved versions may not persis
 | `server.js` | Zero-dependency static host. Every route serves the app |
 | `shortlist-artifact.html` | The same page without its document wrapper, for embedding |
 
+## Deploying
+
+Pushing to `main` runs CI (a boot and smoke check of the server) and, if that passes,
+Railway rebuilds and ships automatically. No manual deploy step.
+
 ## License
 
 [MIT](LICENSE). Copyright (c) 2026 Francis Mercado.

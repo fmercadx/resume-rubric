@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "A resume engine that scores against a published rubric, rewrites and tracks a job search, entirely in the browser",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "author": "Francis Mercado",
   "repository": {
     "type": "git",

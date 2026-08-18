@@ -60,4 +60,11 @@ Railway rebuilds and ships automatically. No manual deploy step.
 
 ## License
 
-[MIT](LICENSE). Copyright (c) 2026 Francis Mercado.
+[GNU AGPL-3.0-or-later](LICENSE). Copyright (c) 2026 Francis Mercado.
+
+You may use, study, modify and share this freely. The one condition that matters:
+if you run a modified version as a network service, you must offer your users the
+source of that modified version. That keeps the guarantee this tool is built on,
+which is that anyone can audit what it does with their resume.
+
+For commercial licensing on other terms, contact the copyright holder.

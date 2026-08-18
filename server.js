@@ -9,14 +9,20 @@ const path = require("path");
 
 const PORT = process.env.PORT || 3000;
 const FILE = path.join(__dirname, "index.html");
+const ORG_FILE = path.join(__dirname, "organizations.html");
 
-let html;
+let html, orgHtml;
 try {
   html = fs.readFileSync(FILE);
+  orgHtml = fs.readFileSync(ORG_FILE);
 } catch (e) {
-  console.error("Could not read index.html:", e.message);
+  console.error("Could not read a page file:", e.message);
   process.exit(1);
 }
+
+/* Exactly two pages are reachable. Everything else falls through to the app, so there is
+   still no directory listing and no stray file is exposed. */
+const ORG_PATHS = new Set(["/for-organizations", "/for-organizations/", "/organizations", "/organizations/"]);
 
 const CSP = [
   "default-src 'self'",
@@ -34,9 +40,10 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { "content-type": "text/plain" });
     return res.end("ok");
   }
+  const body = ORG_PATHS.has(req.url.split("?")[0]) ? orgHtml : html;
   res.writeHead(200, {
     "content-type": "text/html; charset=utf-8",
-    "content-length": html.length,
+    "content-length": body.length,
     "cache-control": "public, max-age=300",
     "content-security-policy": CSP,
     "x-content-type-options": "nosniff",
@@ -44,9 +51,10 @@ const server = http.createServer((req, res) => {
     "permissions-policy": "geolocation=(), camera=(), microphone=()"
   });
   if (req.method === "HEAD") return res.end();
-  res.end(html);
+  res.end(body);
 });
 
 server.listen(PORT, () => {
-  console.log("Resume Rubric listening on " + PORT + " (" + (html.length / 1024).toFixed(1) + " KB)");
+  console.log("Resume Rubric listening on " + PORT +
+    " (app " + (html.length / 1024).toFixed(1) + " KB, organizations " + (orgHtml.length / 1024).toFixed(1) + " KB)");
 });

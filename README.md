@@ -52,3 +52,7 @@ some browsers block local storage on `file://`, so saved versions may not persis
 | `index.html` | The entire application: markup, styles, and engine |
 | `server.js` | Zero-dependency static host. Every route serves the app |
 | `shortlist-artifact.html` | The same page without its document wrapper, for embedding |
+
+## License
+
+[MIT](LICENSE). Copyright (c) 2026 Francis Mercado.

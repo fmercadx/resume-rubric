@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "description": "A resume engine that scores, rewrites and tracks, entirely in the browser",
+  "license": "MIT",
+  "author": "Francis Mercado",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fmercadx/shortlist.git"
+  },
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

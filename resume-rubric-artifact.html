@@ -554,6 +554,7 @@ td small{display:block;color:var(--faint);font-size:.8125rem;margin-top:.2rem;li
 .faq{border-top:1px solid var(--border);max-width:820px}
 .qa{border-bottom:1px solid var(--border)}
 .qa summary{
+  display:block;
   padding:1.15rem 2.25rem 1.15rem 0;cursor:pointer;list-style:none;font-size:1.0625rem;font-weight:550;
   letter-spacing:-.015em;position:relative;transition:color .15s;overflow-wrap:break-word;
 }
@@ -816,6 +817,7 @@ body.printing-resume #printResumeHost{
       <a class="nlink" href="#rubric">The rubric</a>
       <a class="nlink" href="#compare">Compare</a>
       <a class="nlink" href="#pricing">Pricing</a>
+      <a class="nlink" href="/for-organizations">For organizations</a>
     </div>
     <div class="nav-tools">
       <button class="icon-btn" id="themeBtn" aria-label="Switch color theme" title="Switch theme">
@@ -1004,7 +1006,7 @@ Include the responsibilities and the requirements sections. The more of the post
     </div>
 
     <p class="fig" style="margin-top:.9rem">
-      fig. 02 &middot; the engine is deterministic. The same input always returns the same score, and the rubric that produced it is published below.
+      fig. 02 &middot; the engine is deterministic. The same resume always gets the same score, and the rubric that produced it is published below.
     </p>
   </div>
 </section>
@@ -1059,7 +1061,7 @@ Include the responsibilities and the requirements sections. The more of the post
           <p>Resume Rubric splits your resume into a contact block, section headers, roles, and individual bullets. Anything it cannot parse is exactly what an applicant tracking system cannot parse either, so it gets flagged first.</p>
         </div>
         <ul>
-          <li>Detects sections even when your headers are unconventional</li>
+          <li>Finds your sections even when the headings are unusual</li>
           <li>Separates real bullets from headers, dates, and address lines</li>
           <li>Flags the formatting that silently breaks resume parsers</li>
         </ul>
@@ -1213,13 +1215,13 @@ Include the responsibilities and the requirements sections. The more of the post
           <tr><th>&nbsp;</th><th>Resume Rubric</th><th>Typical AI resume tool</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Your resume leaves your device</strong></td><td><span class="no">Never</span><small>Scoring, rewriting, and matching all happen in this tab. The job feed fetches postings inward and sends nothing out about you.</small></td><td><span class="yes">Yes</span><small>Uploaded, stored, and often used as training data.</small></td></tr>
-          <tr><td><strong>Try it before an account</strong></td><td><span class="yes">Yes</span><small>Full analysis on the landing page. No email, no card.</small></td><td><span class="no">No</span><small>Score teased, fixes locked behind signup.</small></td></tr>
-          <tr><td><strong>Scoring formula published</strong></td><td><span class="yes">Yes</span><small>All six weights and thresholds are on this page.</small></td><td><span class="no">No</span><small>A number with no way to audit it.</small></td></tr>
-          <tr><td><strong>Invents metrics for you</strong></td><td><span class="no">Never</span><small>Marks where a number belongs and leaves it to you.</small></td><td><span class="yes">Often</span><small>Plausible figures you cannot defend in an interview.</small></td></tr>
-          <tr><td><strong>Every finding cites a line</strong></td><td><span class="yes">Yes</span><small>Quoted, with the position in your document.</small></td><td><span class="no">Rarely</span><small>Generic advice that could apply to anyone.</small></td></tr>
-          <tr><td><strong>Fields outside tech</strong></td><td><span class="yes">Eight</span><small>Nursing, trades, education, finance, government, and more.</small></td><td><span class="no">One</span><small>Built for engineers, applied to everyone.</small></td></tr>
-          <tr><td><strong>Works offline</strong></td><td><span class="yes">Yes</span><small>One file, no framework, no tracking, no dependencies. Everything except the optional job feed runs with the wifi off.</small></td><td><span class="no">No</span><small>Server round trip for every action.</small></td></tr>
+          <tr><td><strong>Your resume leaves your device</strong></td><td><span class="no">Never</span><small>Scoring, rewriting, and matching all happen in this tab. The job feed fetches postings inward and sends nothing out about you.</small></td><td><span class="yes">Yes</span><small>Uploaded to their servers and kept under their privacy policy.</small></td></tr>
+          <tr><td><strong>Try it before an account</strong></td><td><span class="yes">Yes</span><small>Full analysis on the landing page. No email, no card.</small></td><td><span class="no">No</span><small>You see a score, the fixes are behind a signup.</small></td></tr>
+          <tr><td><strong>Scoring formula published</strong></td><td><span class="yes">Yes</span><small>All six weights and thresholds are on this page.</small></td><td><span class="no">No</span><small>A number with no way to check it.</small></td></tr>
+          <tr><td><strong>Invents metrics for you</strong></td><td><span class="no">Never</span><small>Marks where a number belongs and leaves it to you.</small></td><td><span class="yes">Often</span><small>Believable numbers you cannot back up in an interview.</small></td></tr>
+          <tr><td><strong>Every finding cites a line</strong></td><td><span class="yes">Yes</span><small>Quoted, with the position in your document.</small></td><td><span class="no">Rarely</span><small>General advice that could apply to anyone.</small></td></tr>
+          <tr><td><strong>Fields outside tech</strong></td><td><span class="yes">Eight</span><small>Nursing, trades, education, finance, government, and more.</small></td><td><span class="no">One</span><small>Built for engineers, used on everyone.</small></td></tr>
+          <tr><td><strong>Works offline</strong></td><td><span class="yes">Yes</span><small>One file, no framework, no tracking, no dependencies. Everything except the optional job feed runs with the wifi off.</small></td><td><span class="no">No</span><small>Every action needs their server.</small></td></tr>
           <tr><td><strong>Where the jobs come from</strong></td><td><span class="yes">Public APIs</span><small>The board feeds Greenhouse, Ashby and Lever publish for embedding. Opt in, and it asks for postings without identifying you.</small></td><td><span class="no">Scraped</span><small>Often scraped against the source's terms, then resold as a "daily digest".</small></td></tr>
         </tbody>
       </table>
@@ -1294,7 +1296,7 @@ Include the responsibilities and the requirements sections. The more of the post
       </details>
       <details class="qa">
         <summary>How can it score anything without an AI model?</summary>
-        <p>Because most of what an applicant tracking system does is not intelligent. It matches keywords, checks for parseable structure, and ranks. Resume Rubric reproduces that mechanically, then applies the writing rules that human recruiters have used for decades: lead with a verb, attach a number, cut the filler. A deterministic engine has a real advantage here, which is that it can show you exactly why it took a point off.</p>
+        <p>Because most of what an applicant tracking system does is not intelligent. It matches keywords, checks for parseable structure, and ranks. Resume Rubric reproduces that mechanically, then applies the writing rules that human recruiters have used for decades: lead with a verb, attach a number, cut the filler. A fixed set of rules has one big advantage: it can show you exactly why it took a point off.</p>
       </details>
       <details class="qa">
         <summary>Why will it not write metrics into my bullets?</summary>
@@ -1365,6 +1367,7 @@ Include the responsibilities and the requirements sections. The more of the post
           <li><a href="#compare">Comparison</a></li>
           <li><a href="#rubric">Open rubric</a></li>
           <li><a href="https://github.com/fmercadx/resume-rubric" target="_blank" rel="noopener">Source code</a></li>
+          <li><a href="/for-organizations">For organizations</a></li>
         </ul>
       </div>
     </div>

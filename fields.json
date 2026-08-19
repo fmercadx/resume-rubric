@@ -1,0 +1,155 @@
+{
+  "site": "https://resume-rubric-production.up.railway.app",
+  "fields": [
+    {
+      "slug": "nurse-resume-checker",
+      "key": "health",
+      "title": "Free Nurse Resume Checker: score your RN resume against the job posting",
+      "h1": "A resume checker that knows what a nursing resume needs",
+      "lede": "Paste your resume and the posting. It scores both, shows the exact line behind every finding, and rewrites the weak bullets. No signup, and your resume never leaves your browser.",
+      "who": "RNs, LPNs, CNAs, nurse practitioners, techs and clinical staff",
+      "numbers": [
+        "patients per shift, and the acuity level",
+        "bed count on your unit",
+        "medication error rate, or time with zero errors",
+        "fall rate, readmission rate, or infection rate you moved",
+        "nurses you precepted, and how many passed on the first attempt",
+        "response times on rapid response or code events"
+      ],
+      "creds": ["RN or LPN license", "BSN", "BLS", "ACLS", "PALS", "CNA", "NPI number", "board certification"],
+      "verbs": ["triaged", "assessed", "administered", "charted", "escalated", "stabilized", "precepted", "documented"],
+      "trap": "Most nursing resumes list duties every nurse shares. \"Provided patient care\" tells a manager nothing, because it is true of everyone applying. The fix is scope and outcome: how many patients, how sick, and what changed."
+    },
+    {
+      "slug": "electrician-resume-checker",
+      "key": "trades",
+      "title": "Free Electrician Resume Checker: score your trade resume against the job",
+      "h1": "A resume checker built for the trades, not for software jobs",
+      "lede": "Most resume tools were written for office work. This one knows what a journeyman card is worth and what counts as proof on a job site. Free, no signup, nothing uploaded.",
+      "who": "Electricians, welders, HVAC techs, plumbers, millwrights, mechanics and maintenance crews",
+      "numbers": [
+        "downtime you cut, in hours or percent",
+        "feet of conduit, cable tray or pipe run",
+        "voltage and system size you worked on",
+        "incident free hours or days on site",
+        "square footage of the facility",
+        "units, machines or panels you maintained"
+      ],
+      "creds": ["Journeyman or master license", "OSHA 10 or OSHA 30", "CDL", "AWS D1.1", "EPA 608", "apprenticeship hours"],
+      "verbs": ["fabricated", "installed", "inspected", "calibrated", "welded", "wired", "rigged", "commissioned", "serviced"],
+      "trap": "Trade resumes get judged on the same rules as everyone else, which is unfair but real. The winning move is numbers, because your work produces them naturally. Downtime, footage, voltage, incident free hours. Most people leave all of it off."
+    },
+    {
+      "slug": "teacher-resume-checker",
+      "key": "edu",
+      "title": "Free Teacher Resume Checker: score your teaching resume against the posting",
+      "h1": "A resume checker that understands a teaching resume",
+      "lede": "It looks for the things a principal and a district screening system actually check, and shows you the line behind every point. Free, no account, nothing leaves your browser.",
+      "who": "Classroom teachers, paraeducators, counselors, instructional coaches and school staff",
+      "numbers": [
+        "class size and number of sections",
+        "growth on a assessment, in points or percent",
+        "pass rates or proficiency rates you moved",
+        "students served across a year",
+        "attendance or behavior referrals you reduced",
+        "colleagues you mentored or trained"
+      ],
+      "creds": ["State teaching certificate", "endorsements", "Praxis", "ESL or SPED certification", "master's degree"],
+      "verbs": ["differentiated", "assessed", "facilitated", "mentored", "scaffolded", "designed", "tutored"],
+      "trap": "Teaching resumes drift into philosophy. Districts screen for evidence. One line with growth data beats a paragraph about your approach to learning, because the first can be checked and the second cannot."
+    },
+    {
+      "slug": "cdl-driver-resume-checker",
+      "key": "ops",
+      "title": "Free CDL Driver and Warehouse Resume Checker",
+      "h1": "A resume checker for drivers, warehouse and operations work",
+      "lede": "Scores your resume against the job posting and shows what to fix, in plain language. Free, no signup, and nothing is uploaded anywhere.",
+      "who": "CDL drivers, warehouse leads, forklift operators, dispatchers, supervisors and logistics staff",
+      "numbers": [
+        "safe miles driven, and years without an accident",
+        "loads or stops per day",
+        "on time delivery rate",
+        "units picked or shipped per shift",
+        "headcount you supervised",
+        "cost per unit or per mile you cut"
+      ],
+      "creds": ["CDL class A or B", "endorsements such as hazmat or tanker", "forklift certification", "OSHA", "DOT medical card", "clean MVR"],
+      "verbs": ["routed", "dispatched", "expedited", "staffed", "standardized", "streamlined", "loaded"],
+      "trap": "Driving and warehouse resumes often list equipment and leave out performance. Safety record and on time rate are the two numbers that get you called, and almost nobody puts them on the page."
+    },
+    {
+      "slug": "accountant-resume-checker",
+      "key": "finance",
+      "title": "Free Accountant and Finance Resume Checker",
+      "h1": "A resume checker for accounting and finance roles",
+      "lede": "It checks the things a finance hiring manager screens for and shows the exact line behind every finding. Free, no account needed, nothing uploaded.",
+      "who": "Accountants, bookkeepers, analysts, auditors, AP and AR staff and finance managers",
+      "numbers": [
+        "portfolio or budget size you handled",
+        "days to close, and how much you cut it",
+        "variance identified or recovered, in dollars",
+        "accounts or transactions per month",
+        "audit findings closed",
+        "cost savings you delivered"
+      ],
+      "creds": ["CPA", "CFA", "Series 7 or 63", "GAAP", "SOX", "MBA"],
+      "verbs": ["reconciled", "forecasted", "audited", "modeled", "budgeted", "consolidated", "hedged"],
+      "trap": "Finance resumes say \"responsible for month end close\" instead of \"cut close from twelve days to seven\". The second one is the same job described in a way that can be checked."
+    },
+    {
+      "slug": "free-resume-checker-no-signup",
+      "key": "general",
+      "title": "Free Resume Checker, No Signup and No Upload",
+      "h1": "A free resume checker that does not ask you to sign up",
+      "lede": "No account, no email, no card, and no free trial that turns into a charge. Paste your resume and a job posting and get the full result, including the fixes.",
+      "who": "Anyone applying for a job, in any field",
+      "numbers": [
+        "money saved or earned",
+        "time cut from a process",
+        "people trained, managed or served",
+        "volume handled per day, week or month",
+        "error or defect rate you reduced",
+        "percentage improvement, with the starting point"
+      ],
+      "creds": ["Licenses your field requires", "certifications", "degrees", "clearances"],
+      "verbs": ["led", "built", "cut", "delivered", "resolved", "increased", "standardized"],
+      "trap": "Most free resume checkers show you a score and put the fixes behind a signup. This one shows you everything, because the fixes are the only part that helps and the score on its own is useless."
+    },
+    {
+      "slug": "ats-resume-checker",
+      "key": "general",
+      "title": "Free ATS Resume Checker: see what a resume scanner reads",
+      "h1": "An ATS resume checker that shows its rubric",
+      "lede": "It checks the things applicant tracking systems are known to check, and publishes the whole scoring rubric so you can see where every point went. Free and nothing is uploaded.",
+      "who": "Anyone whose resume keeps disappearing into online applications",
+      "numbers": [
+        "any figure that proves the result rather than describing the task",
+        "percentages, with the starting number so it can be judged",
+        "counts of people, dollars, units or hours",
+        "time periods, so the reader knows the pace"
+      ],
+      "creds": ["Whatever the posting names, in the same words it uses"],
+      "verbs": ["led", "built", "reduced", "delivered", "managed", "designed", "resolved"],
+      "trap": "No tool can tell you exactly what Workday or Taleo scored you, because none of them publish it. Be careful with any product that claims a real ATS score. What can be checked is whether your file parses, whether the posting's words appear, and whether your claims carry evidence."
+    },
+    {
+      "slug": "veteran-resume-checker",
+      "key": "gov",
+      "title": "Free Veteran Resume Checker: translate service into civilian terms",
+      "h1": "A resume checker for veterans moving into civilian work",
+      "lede": "Scores your resume against a specific posting and shows which military terms are not landing. Free, no account, and nothing about you is uploaded anywhere.",
+      "who": "Transitioning service members, veterans and military spouses",
+      "numbers": [
+        "people you led, and their rank or level",
+        "budget or equipment value you were accountable for",
+        "operations, missions or inspections completed",
+        "readiness or qualification rates you raised",
+        "training hours delivered",
+        "incidents avoided or safety record"
+      ],
+      "creds": ["Security clearance and level", "GS series if applicable", "certifications earned in service", "licenses that transfer"],
+      "verbs": ["led", "coordinated", "trained", "administered", "briefed", "audited", "enforced"],
+      "trap": "The usual advice is to strip out all military language. That goes too far. The posting's words matter, so keep what maps cleanly and translate the rest. \"Accountable for $4M of equipment with zero losses\" needs no translation at all."
+    }
+  ]
+}

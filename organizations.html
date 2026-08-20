@@ -125,6 +125,36 @@ thead th{font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-tr
 @media(max-width:470px){
   th,td{padding:.55rem .45rem}
 }
+/* Narrower than this a data table cannot hold its shape, so each row becomes its
+   own card with the column name printed beside each value. The labels are on the
+   cells themselves, since this page carries no script. */
+@media(max-width:520px){
+  .tbl-wrap.stacks{overflow-x:visible;border:none;background:none;border-radius:0}
+  .stacks table,.stacks tbody,.stacks tr,.stacks td{display:block;width:auto}
+  .stacks thead{display:none}
+  .stacks table{font-size:.875rem}
+  .stacks tbody tr{
+    border:1px solid var(--border);border-radius:var(--r);background:var(--surface);
+    padding:0 .9rem;margin-bottom:.7rem;
+  }
+  .stacks tbody tr:last-child{margin-bottom:0}
+  .stacks tbody td{
+    padding:.6rem 0;border-bottom:1px solid var(--border);
+    display:grid;grid-template-columns:7rem 1fr;gap:.75rem;align-items:start;
+  }
+  .stacks tbody tr td:last-child{border-bottom:none}
+  .stacks tbody td::before{
+    content:attr(data-label);
+    font-family:var(--mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);line-height:1.9;
+  }
+  .stacks tbody td:first-child{display:block;font-weight:600;font-size:.9375rem;padding-top:.85rem}
+  .stacks tbody td:first-child::before{content:none}
+  /* a cell can hold more than a bare string, such as a <small> note. Without
+     this those become grid items of their own and land under the label. */
+  .stacks tbody td > *{grid-column:2}
+  .stacks tbody td:first-child > *{grid-column:auto}
+}
 tbody tr:last-child td{border-bottom:none}
 td strong{font-weight:600}
 td small{display:block;color:var(--faint);font-size:.8125rem;margin-top:.25rem;line-height:1.5}
@@ -323,22 +353,22 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
   <div class="wrap">
     <span class="eyebrow">What advisors get</span>
     <h2 class="h2">A score you can teach from.</h2>
-    <div class="tbl-wrap" style="margin-top:2rem">
+    <div class="tbl-wrap stacks" style="margin-top:2rem">
       <table>
         <thead><tr><th>Capability</th><th>Why it helps in a session</th></tr></thead>
         <tbody>
-          <tr><td><strong>A published rubric</strong><small>Six weighted dimensions, all thresholds public</small></td>
-              <td>An advisor can show exactly where the points went and why. The rubric works as a lesson plan on its own.</td></tr>
-          <tr><td><strong>Every finding cites a line</strong><small>Quoted, with its position in the document</small></td>
-              <td>Ends the argument. People see their own sentence next to what is wrong with it.</td></tr>
-          <tr><td><strong>Measured action plan</strong><small>Each fix carries a real point value</small></td>
-              <td>The tool makes the fix on a copy, scores it again, and shows the difference. Advisors can rank fixes by what they are worth instead of guessing.</td></tr>
-          <tr><td><strong>It never invents a metric</strong><small>Marks the blank and stops</small></td>
-              <td>Nobody gets talked into a claim they cannot back up. The blank is where the coaching happens.</td></tr>
-          <tr><td><strong>ATS-safe export</strong><small>Clean .docx, then re-read and rescored to prove it parses</small></td>
-              <td>Answers the "will this file work" question by showing it, instead of just saying so.</td></tr>
-          <tr><td><strong>Interview questions from their own bullets</strong><small>Generated from what they actually wrote</small></td>
-              <td>Turns one resume session into interview practice with no extra prep.</td></tr>
+          <tr><td data-label="Capability"><strong>A published rubric</strong><small>Six weighted dimensions, all thresholds public</small></td>
+              <td data-label="Why it helps in a session">An advisor can show exactly where the points went and why. The rubric works as a lesson plan on its own.</td></tr>
+          <tr><td data-label="Capability"><strong>Every finding cites a line</strong><small>Quoted, with its position in the document</small></td>
+              <td data-label="Why it helps in a session">Ends the argument. People see their own sentence next to what is wrong with it.</td></tr>
+          <tr><td data-label="Capability"><strong>Measured action plan</strong><small>Each fix carries a real point value</small></td>
+              <td data-label="Why it helps in a session">The tool makes the fix on a copy, scores it again, and shows the difference. Advisors can rank fixes by what they are worth instead of guessing.</td></tr>
+          <tr><td data-label="Capability"><strong>It never invents a metric</strong><small>Marks the blank and stops</small></td>
+              <td data-label="Why it helps in a session">Nobody gets talked into a claim they cannot back up. The blank is where the coaching happens.</td></tr>
+          <tr><td data-label="Capability"><strong>ATS-safe export</strong><small>Clean .docx, then re-read and rescored to prove it parses</small></td>
+              <td data-label="Why it helps in a session">Answers the "will this file work" question by showing it, instead of just saying so.</td></tr>
+          <tr><td data-label="Capability"><strong>Interview questions from their own bullets</strong><small>Generated from what they actually wrote</small></td>
+              <td data-label="Why it helps in a session">Turns one resume session into interview practice with no extra prep.</td></tr>
         </tbody>
       </table>
     </div>
@@ -349,19 +379,19 @@ footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-bloc
   <div class="wrap">
     <span class="eyebrow">Deployment</span>
     <h2 class="h2">Three ways to run it.</h2>
-    <div class="tbl-wrap" style="margin-top:2rem">
+    <div class="tbl-wrap stacks" style="margin-top:2rem">
       <table>
         <thead><tr><th>Option</th><th>What is involved</th><th>Best for</th></tr></thead>
         <tbody>
-          <tr><td><strong>Hosted</strong></td>
-              <td>Use the public instance, or a branded one on your own subdomain. Nothing to install.<small>Set up in a day.</small></td>
-              <td>Programs with no IT help, or a pilot you want running this week.</td></tr>
-          <tr><td><strong>Self-hosted</strong></td>
-              <td>One file plus a small program, on your own servers, inside your network if you want.<small>Your IT owns the deployment. Updates pulled when you choose.</small></td>
-              <td>Places whose rules say everything has to run on their own systems.</td></tr>
-          <tr><td><strong>Embedded</strong></td>
-              <td>Dropped into a page you already have.<small>It is one page that needs nothing else, so it drops in cleanly.</small></td>
-              <td>Job portals and course pages people already log into.</td></tr>
+          <tr><td data-label="Option"><strong>Hosted</strong></td>
+              <td data-label="What is involved">Use the public instance, or a branded one on your own subdomain. Nothing to install.<small>Set up in a day.</small></td>
+              <td data-label="Best for">Programs with no IT help, or a pilot you want running this week.</td></tr>
+          <tr><td data-label="Option"><strong>Self-hosted</strong></td>
+              <td data-label="What is involved">One file plus a small program, on your own servers, inside your network if you want.<small>Your IT owns the deployment. Updates pulled when you choose.</small></td>
+              <td data-label="Best for">Places whose rules say everything has to run on their own systems.</td></tr>
+          <tr><td data-label="Option"><strong>Embedded</strong></td>
+              <td data-label="What is involved">Dropped into a page you already have.<small>It is one page that needs nothing else, so it drops in cleanly.</small></td>
+              <td data-label="Best for">Job portals and course pages people already log into.</td></tr>
         </tbody>
       </table>
     </div>

@@ -642,6 +642,51 @@ td small{display:block;color:var(--faint);font-size:.8125rem;margin-top:.2rem;li
 @media(max-width:470px){
   th,td{padding:.55rem .45rem}
 }
+/* Narrower than this a data table cannot hold its shape, so each row becomes its
+   own card and every value gets its column name printed beside it. The first cell
+   is the row's own name, so it heads the card instead of being a labelled value.
+   The labels sit on the cells themselves, so this needs no script and still
+   works with JavaScript turned off. Only the two tables holding sentences carry
+   the stacks class. The round trip proof and the saved versions list hold short
+   values that stay readable as columns, so they keep them. */
+@media(max-width:520px){
+  .tbl-wrap.stacks{overflow-x:visible;border:none;background:none;border-radius:0}
+  .stacks table,.stacks tbody,.stacks tr,.stacks td{display:block;width:auto}
+  .stacks thead{display:none}
+  .stacks table{font-size:.875rem}
+  .stacks tbody tr{
+    border:1px solid var(--border);border-radius:var(--r);background:var(--surface);
+    padding:0 .9rem;margin-bottom:.7rem;
+  }
+  .stacks tbody tr:last-child{margin-bottom:0}
+  .stacks tbody td{
+    padding:.6rem 0;border-bottom:1px solid var(--border);
+    display:grid;grid-template-columns:7rem 1fr;gap:.75rem;align-items:start;
+  }
+  .stacks tbody tr td:last-child{border-bottom:none}
+  .stacks tbody td::before{
+    content:attr(data-label);
+    font-family:var(--mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);line-height:1.9;
+  }
+  .stacks tbody td:first-child{display:block;font-weight:600;font-size:.9375rem;padding-top:.85rem}
+  .stacks tbody td:first-child::before{content:none}
+  /* a cell can hold more than a bare string, such as a <small> note. Without
+     this those become grid items of their own and land under the label. */
+  .stacks tbody td > *{grid-column:2}
+  .stacks tbody td:first-child > *{grid-column:auto}
+  /* defensive: a column with no heading has nothing to label, so it spans the
+     card rather than leaving an empty label gutter */
+  .stacks tbody td[data-label=""]{grid-template-columns:1fr}
+  .stacks tbody td[data-label=""]::before{display:none}
+  /* the comparison table tints our own column. As a full width block in a card
+     that reads far too heavy, so mark it with a rule and a coloured label
+     instead. */
+  .tbl-wrap.compare tbody td:nth-child(2){
+    background:none;border-left:2px solid var(--accent);padding-left:.7rem;
+  }
+  .tbl-wrap.compare tbody td:nth-child(2)::before{color:var(--accent)}
+}
 
 /* fields */
 .fields{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
@@ -1275,47 +1320,47 @@ Include the responsibilities and the requirements sections. The more of the post
         Every other tool gives you a score and hides the formula. A score you cannot audit is a score you cannot act on. This is the whole thing.
       </p>
     </div>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap stacks">
       <table>
         <thead>
           <tr><th>Dimension</th><th>Points</th><th>What is measured</th><th>Full marks when</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Job match</strong><small>The keyword screen</small></td>
-            <td class="w">30</td>
-            <td>Frequency weighted terms and phrases pulled from the posting, checked against your resume with alias resolution.</td>
-            <td>You cover the employer's high weight terms honestly, in context, in your own bullets.</td>
+            <td data-label="Dimension"><strong>Job match</strong><small>The keyword screen</small></td>
+            <td class="w" data-label="Points">30</td>
+            <td data-label="What is measured">Frequency weighted terms and phrases pulled from the posting, checked against your resume with alias resolution.</td>
+            <td data-label="Full marks when">You cover the employer's high weight terms honestly, in context, in your own bullets.</td>
           </tr>
           <tr>
-            <td><strong>Quantified impact</strong><small>The credibility test</small></td>
-            <td class="w">20</td>
-            <td>Share of bullets containing a number, percentage, currency figure, duration, or countable volume.</td>
-            <td>At least three in five bullets carry a real, verifiable figure.</td>
+            <td data-label="Dimension"><strong>Quantified impact</strong><small>The credibility test</small></td>
+            <td class="w" data-label="Points">20</td>
+            <td data-label="What is measured">Share of bullets containing a number, percentage, currency figure, duration, or countable volume.</td>
+            <td data-label="Full marks when">At least three in five bullets carry a real, verifiable figure.</td>
           </tr>
           <tr>
-            <td><strong>Action &amp; voice</strong><small>The first three words</small></td>
-            <td class="w">15</td>
-            <td>Opening verb strength, weak stems like "responsible for", passive constructions, and first person pronouns.</td>
-            <td>Every bullet opens on a strong past tense verb with no pronouns anywhere.</td>
+            <td data-label="Dimension"><strong>Action &amp; voice</strong><small>The first three words</small></td>
+            <td class="w" data-label="Points">15</td>
+            <td data-label="What is measured">Opening verb strength, weak stems like "responsible for", passive constructions, and first person pronouns.</td>
+            <td data-label="Full marks when">Every bullet opens on a strong past tense verb with no pronouns anywhere.</td>
           </tr>
           <tr>
-            <td><strong>ATS parseability</strong><small>Will a machine read it</small></td>
-            <td class="w">15</td>
-            <td>Contact block, recognizable section headers, date consistency, character hygiene, and total length.</td>
-            <td>A parser can find your email, your sections, and your dates without guessing.</td>
+            <td data-label="Dimension"><strong>ATS parseability</strong><small>Will a machine read it</small></td>
+            <td class="w" data-label="Points">15</td>
+            <td data-label="What is measured">Contact block, recognizable section headers, date consistency, character hygiene, and total length.</td>
+            <td data-label="Full marks when">A parser can find your email, your sections, and your dates without guessing.</td>
           </tr>
           <tr>
-            <td><strong>Writing quality</strong><small>The human screen</small></td>
-            <td class="w">10</td>
-            <td>Filler words, unbacked buzzwords, repeated verbs, and bullet length distribution.</td>
-            <td>No filler, no unearned adjectives, and varied bullets in the eight to thirty word range.</td>
+            <td data-label="Dimension"><strong>Writing quality</strong><small>The human screen</small></td>
+            <td class="w" data-label="Points">10</td>
+            <td data-label="What is measured">Filler words, unbacked buzzwords, repeated verbs, and bullet length distribution.</td>
+            <td data-label="Full marks when">No filler, no unearned adjectives, and varied bullets in the eight to thirty word range.</td>
           </tr>
           <tr>
-            <td><strong>Completeness</strong><small>The obvious gaps</small></td>
-            <td class="w">10</td>
-            <td>Required sections, employment dates, education, and the credentials your specific field expects.</td>
-            <td>Nothing a recruiter would have to email you to ask for is missing.</td>
+            <td data-label="Dimension"><strong>Completeness</strong><small>The obvious gaps</small></td>
+            <td class="w" data-label="Points">10</td>
+            <td data-label="What is measured">Required sections, employment dates, education, and the credentials your specific field expects.</td>
+            <td data-label="Full marks when">Nothing a recruiter would have to email you to ask for is missing.</td>
           </tr>
         </tbody>
       </table>
@@ -1365,20 +1410,20 @@ Include the responsibilities and the requirements sections. The more of the post
   <div class="wrap">
     <span class="eyebrow">The difference</span>
     <h2 class="h2" style="margin-bottom:2rem">Where the others quietly cost you.</h2>
-    <div class="tbl-wrap compare">
+    <div class="tbl-wrap compare stacks">
       <table>
         <thead>
           <tr><th>&nbsp;</th><th>Resume Rubric</th><th>Typical AI resume tool</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Your resume leaves your device</strong></td><td><span class="no">Never</span><small>Scoring, rewriting, and matching all happen in this tab. The job feed fetches postings inward and sends nothing out about you.</small></td><td><span class="yes">Yes</span><small>Uploaded to their servers and kept under their privacy policy.</small></td></tr>
-          <tr><td><strong>Try it before an account</strong></td><td><span class="yes">Yes</span><small>Full analysis on the landing page. No email, no card.</small></td><td><span class="no">No</span><small>You see a score, the fixes are behind a signup.</small></td></tr>
-          <tr><td><strong>Scoring formula published</strong></td><td><span class="yes">Yes</span><small>All six weights and thresholds are on this page.</small></td><td><span class="no">No</span><small>A number with no way to check it.</small></td></tr>
-          <tr><td><strong>Invents metrics for you</strong></td><td><span class="no">Never</span><small>Marks where a number belongs and leaves it to you.</small></td><td><span class="yes">Often</span><small>Believable numbers you cannot back up in an interview.</small></td></tr>
-          <tr><td><strong>Every finding cites a line</strong></td><td><span class="yes">Yes</span><small>Quoted, with the position in your document.</small></td><td><span class="no">Rarely</span><small>General advice that could apply to anyone.</small></td></tr>
-          <tr><td><strong>Fields outside tech</strong></td><td><span class="yes">Eight</span><small>Nursing, trades, education, finance, government, and more.</small></td><td><span class="no">One</span><small>Built for engineers, used on everyone.</small></td></tr>
-          <tr><td><strong>Works offline</strong></td><td><span class="yes">Yes</span><small>One file, no framework, no tracking, no dependencies. Everything except the optional job feed runs with the wifi off.</small></td><td><span class="no">No</span><small>Every action needs their server.</small></td></tr>
-          <tr><td><strong>Where the jobs come from</strong></td><td><span class="yes">Public APIs</span><small>The board feeds Greenhouse, Ashby and Lever publish for embedding. Opt in, and it asks for postings without identifying you.</small></td><td><span class="no">Scraped</span><small>Often scraped against the source's terms, then resold as a "daily digest".</small></td></tr>
+          <tr><td data-label=""><strong>Your resume leaves your device</strong></td><td data-label="Resume Rubric"><span class="no">Never</span><small>Scoring, rewriting, and matching all happen in this tab. The job feed fetches postings inward and sends nothing out about you.</small></td><td data-label="Typical AI resume tool"><span class="yes">Yes</span><small>Uploaded to their servers and kept under their privacy policy.</small></td></tr>
+          <tr><td data-label=""><strong>Try it before an account</strong></td><td data-label="Resume Rubric"><span class="yes">Yes</span><small>Full analysis on the landing page. No email, no card.</small></td><td data-label="Typical AI resume tool"><span class="no">No</span><small>You see a score, the fixes are behind a signup.</small></td></tr>
+          <tr><td data-label=""><strong>Scoring formula published</strong></td><td data-label="Resume Rubric"><span class="yes">Yes</span><small>All six weights and thresholds are on this page.</small></td><td data-label="Typical AI resume tool"><span class="no">No</span><small>A number with no way to check it.</small></td></tr>
+          <tr><td data-label=""><strong>Invents metrics for you</strong></td><td data-label="Resume Rubric"><span class="no">Never</span><small>Marks where a number belongs and leaves it to you.</small></td><td data-label="Typical AI resume tool"><span class="yes">Often</span><small>Believable numbers you cannot back up in an interview.</small></td></tr>
+          <tr><td data-label=""><strong>Every finding cites a line</strong></td><td data-label="Resume Rubric"><span class="yes">Yes</span><small>Quoted, with the position in your document.</small></td><td data-label="Typical AI resume tool"><span class="no">Rarely</span><small>General advice that could apply to anyone.</small></td></tr>
+          <tr><td data-label=""><strong>Fields outside tech</strong></td><td data-label="Resume Rubric"><span class="yes">Eight</span><small>Nursing, trades, education, finance, government, and more.</small></td><td data-label="Typical AI resume tool"><span class="no">One</span><small>Built for engineers, used on everyone.</small></td></tr>
+          <tr><td data-label=""><strong>Works offline</strong></td><td data-label="Resume Rubric"><span class="yes">Yes</span><small>One file, no framework, no tracking, no dependencies. Everything except the optional job feed runs with the wifi off.</small></td><td data-label="Typical AI resume tool"><span class="no">No</span><small>Every action needs their server.</small></td></tr>
+          <tr><td data-label=""><strong>Where the jobs come from</strong></td><td data-label="Resume Rubric"><span class="yes">Public APIs</span><small>The board feeds Greenhouse, Ashby and Lever publish for embedding. Opt in, and it asks for postings without identifying you.</small></td><td data-label="Typical AI resume tool"><span class="no">Scraped</span><small>Often scraped against the source's terms, then resold as a "daily digest".</small></td></tr>
         </tbody>
       </table>
     </div>

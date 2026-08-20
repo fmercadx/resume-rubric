@@ -1,0 +1,501 @@
+<!doctype html>
+<!--
+  Resume Rubric: a resume engine that scores against a published rubric.
+  Copyright (C) 2026 Francis Mercado
+  Licensed under the GNU AGPL-3.0-or-later. Source: https://github.com/fmercadx/resume-rubric
+-->
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume Rubric for organizations: a resume tool that never sees your people's data</title>
+<meta name="description" content="A resume scoring and rewriting tool for career centers, workforce boards, veteran programs and unions. Runs entirely on the participant's device, so no resume data reaches any server. Covers healthcare, trades, education and government, not just tech.">
+<link rel="canonical" href="https://fmercadx.github.io/resume-rubric/for-organizations/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Resume Rubric">
+<meta property="og:title" content="Resume Rubric for schools, programs and agencies">
+<meta property="og:description" content="A resume tool that never sees your people's data, because it runs on their device. Covers healthcare, trades, education and government, not just tech.">
+<meta property="og:url" content="https://fmercadx.github.io/resume-rubric/for-organizations/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Resume Rubric for schools, programs and agencies">
+<meta name="twitter:description" content="A resume tool that never sees your people's data, because it runs on their device. Covers healthcare, trades, education and government, not just tech.">
+<style>
+:root{
+  --bg:#0B0E14; --bg-deep:#070910; --surface:#12161F; --surface-2:#1A1F2B; --surface-3:#232937;
+  --border:rgba(247,244,238,.10); --border-strong:rgba(247,244,238,.20);
+  --text:#F7F4EE; --muted:#AAB2C0; --faint:#7F8899;
+  --accent:#F0B429; --accent-soft:rgba(240,180,41,.14); --accent-line:rgba(240,180,41,.35); --accent-ink:#0B0E14;
+  --good:#4ADE80; --good-soft:rgba(74,222,128,.13); --bad:#FB7185; --bad-soft:rgba(251,113,133,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 40px -12px rgba(0,0,0,.6);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --gut:clamp(1.15rem,4vw,2.75rem); --maxw:1180px; --r:14px; --r-sm:9px;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#F7F4EE; --bg-deep:#EDE8DE; --surface:#FFFFFF; --surface-2:#F2EEE5; --surface-3:#E7E1D4;
+    --border:rgba(11,14,20,.13); --border-strong:rgba(11,14,20,.26);
+    --text:#14181F; --muted:#4B5361; --faint:#5A6270;
+    --accent:#9A6206; --accent-soft:rgba(154,98,6,.11); --accent-line:rgba(154,98,6,.32); --accent-ink:#FFFFFF;
+    --good:#15803D; --good-soft:rgba(21,128,61,.11); --bad:#BE123C; --bad-soft:rgba(190,18,60,.10);
+    --shadow:0 1px 2px rgba(11,14,20,.06), 0 14px 40px -18px rgba(11,14,20,.24);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F7F4EE; --bg-deep:#EDE8DE; --surface:#FFFFFF; --surface-2:#F2EEE5; --surface-3:#E7E1D4;
+  --border:rgba(11,14,20,.13); --border-strong:rgba(11,14,20,.26);
+  --text:#14181F; --muted:#4B5361; --faint:#5A6270;
+  --accent:#9A6206; --accent-soft:rgba(154,98,6,.11); --accent-line:rgba(154,98,6,.32); --accent-ink:#FFFFFF;
+  --good:#15803D; --good-soft:rgba(21,128,61,.11); --bad:#BE123C; --bad-soft:rgba(190,18,60,.10);
+  --shadow:0 1px 2px rgba(11,14,20,.06), 0 14px 40px -18px rgba(11,14,20,.24);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.001ms!important;animation-duration:.001ms!important}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.022em;line-height:1.12}
+p{margin:0}
+a{color:inherit}
+img,svg{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+::selection{background:var(--accent);color:var(--accent-ink)}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut);width:100%}
+.sec{border-top:1px solid var(--border);padding-block:clamp(3.25rem,8vw,6rem)}
+.eyebrow{font-family:var(--mono);font-size:.6875rem;letter-spacing:.19em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:.65rem;margin-bottom:1.1rem}
+.eyebrow::before{content:"";width:1.6rem;height:1px;background:var(--accent-line);flex:none}
+.serif{font-family:var(--serif);font-style:italic;font-weight:400}
+.h2{font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:-.03em;max-width:22ch}
+.lede{color:var(--muted);font-size:1.0625rem;max-width:60ch;line-height:1.62}
+.fig{font-family:var(--mono);font-size:.6875rem;color:var(--faint);letter-spacing:.05em}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;justify-content:center;padding:.72rem 1.25rem;border-radius:100px;border:1px solid transparent;font-size:.9375rem;font-weight:550;cursor:pointer;text-decoration:none;transition:transform .16s,background-color .16s,border-color .16s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink);font-weight:650}
+.btn-ghost{border-color:var(--border-strong);color:var(--text)}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--accent-line)}
+
+.nav{position:sticky;top:0;z-index:80;background:color-mix(in srgb,var(--bg) 84%,transparent);backdrop-filter:blur(14px) saturate(160%);border-bottom:1px solid var(--border)}
+.nav-in{display:flex;align-items:center;gap:1.25rem;height:60px}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:650;letter-spacing:-.03em;font-size:1.0625rem;text-decoration:none;flex:none}
+.brand-mark{width:22px;height:22px;flex:none}
+.nav-links{display:flex;gap:.3rem;margin-left:auto;align-items:center}
+.nav-links a{font-size:.875rem;color:var(--muted);padding:.4rem .7rem;border-radius:8px;text-decoration:none}
+.nav-links a:hover{color:var(--text);background:var(--surface-2)}
+@media(max-width:860px){.nav-links a.hideable{display:none}}
+
+.hero{padding-block:clamp(3rem,7vw,5.5rem) clamp(2.5rem,5vw,4rem);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;left:50%;top:-30%;width:min(1000px,140vw);height:560px;transform:translateX(-50%);z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,var(--accent-soft),transparent 68%)}
+h1{font-size:clamp(2.3rem,6vw,4.1rem);letter-spacing:-.035em;max-width:17ch}
+.pill{display:inline-flex;align-items:center;gap:.5rem;padding:.32rem .78rem .32rem .42rem;border:1px solid var(--border);border-radius:100px;background:var(--surface);font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1.4rem}
+.pill b{background:var(--accent);color:var(--accent-ink);border-radius:100px;padding:.12rem .5rem;font-weight:700}
+.hero-cta{display:flex;gap:.7rem;margin-top:2rem;flex-wrap:wrap}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem}
+.grid-2{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(1.5rem,4vw,3rem);align-items:start}
+@media(max-width:900px){.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+.card{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);padding:1.4rem}
+.card h3{font-size:1.0625rem;margin-bottom:.5rem;letter-spacing:-.018em}
+.card p{font-size:.9375rem;color:var(--muted);line-height:1.6}
+.card .num{font-family:var(--mono);font-size:.6875rem;color:var(--accent);letter-spacing:.14em;display:block;margin-bottom:.8rem}
+
+.proof{border:1px solid var(--accent-line);border-radius:var(--r);background:linear-gradient(180deg,var(--accent-soft),transparent 42%),var(--surface);padding:clamp(1.25rem,3vw,2rem);box-shadow:var(--shadow)}
+.proof h3{font-size:1.25rem;margin-bottom:.6rem;letter-spacing:-.02em}
+.proof p{color:var(--muted);font-size:.9375rem;line-height:1.62}
+.checks{list-style:none;padding:0;margin:1.25rem 0 0;display:grid;gap:.7rem}
+.checks li{display:grid;grid-template-columns:auto 1fr;gap:.65rem;font-size:.9375rem;line-height:1.5;align-items:start}
+.checks svg{margin-top:.3rem;flex:none;color:var(--good)}
+.checks b{font-weight:600}
+.term{font-family:var(--mono);font-size:.8125rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:.85rem 1rem;color:var(--muted);line-height:1.7;margin-top:1.15rem;overflow-x:auto}
+.term .ok{color:var(--good)}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.9375rem}
+th,td{text-align:left;padding:.9rem 1rem;border-bottom:1px solid var(--border);vertical-align:top}
+thead th{font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);background:var(--surface-2);font-weight:500}
+tbody tr:last-child td{border-bottom:none}
+td strong{font-weight:600}
+td small{display:block;color:var(--faint);font-size:.8125rem;margin-top:.25rem;line-height:1.5}
+.yes{color:var(--good);font-weight:700}
+.no{color:var(--bad);font-weight:700}
+
+.pops{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+@media(max-width:900px){.pops{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pops{grid-template-columns:1fr}}
+.pop{background:var(--surface);padding:1.1rem}
+.pop b{display:block;font-size:.9375rem;margin-bottom:.3rem;letter-spacing:-.015em}
+.pop span{font-size:.8125rem;color:var(--faint);line-height:1.55;display:block}
+
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem}
+@media(max-width:900px){.prices{grid-template-columns:1fr}}
+.price{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);padding:1.5rem;display:flex;flex-direction:column}
+.price.hi{border-color:var(--accent-line);background:linear-gradient(180deg,var(--accent-soft),transparent 30%),var(--surface);position:relative}
+.price .ptag{position:absolute;top:-.66rem;left:1.5rem;background:var(--accent);color:var(--accent-ink);font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:.2rem .55rem;border-radius:100px}
+.price h3{font-size:1.0625rem;margin-bottom:.25rem}
+.price .psub{font-size:.8125rem;color:var(--faint);margin-bottom:1rem;line-height:1.5}
+.price .amt{display:flex;align-items:baseline;gap:.3rem;margin-bottom:.2rem}
+.price .amt b{font-size:2.1rem;font-weight:600;letter-spacing:-.04em;line-height:1}
+.price .amt span{font-size:.8125rem;color:var(--faint)}
+.price .fine{font-family:var(--mono);font-size:.6875rem;color:var(--faint);margin-bottom:1.2rem}
+.price ul{list-style:none;padding:0;margin:0 0 1.4rem;display:grid;gap:.55rem}
+.price li{font-size:.875rem;color:var(--muted);display:grid;grid-template-columns:auto 1fr;gap:.55rem;line-height:1.5}
+.price li svg{margin-top:.28rem;flex:none;color:var(--accent)}
+.price .btn{margin-top:auto;width:100%}
+
+.faq{border-top:1px solid var(--border);max-width:840px}
+.qa{border-bottom:1px solid var(--border)}
+.qa summary{
+  display:block;padding:1.1rem 2.25rem 1.1rem 0;cursor:pointer;list-style:none;font-size:1.0625rem;font-weight:550;letter-spacing:-.015em;position:relative;overflow-wrap:break-word}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary:hover{color:var(--accent)}
+.qa summary::after{content:"+";position:absolute;right:.25rem;top:1rem;font-family:var(--mono);font-size:1.15rem;color:var(--accent);transition:transform .2s}
+.qa[open] summary::after{transform:rotate(45deg)}
+.qa p{padding:0 0 1.3rem;color:var(--muted);font-size:.9375rem;line-height:1.68;max-width:70ch}
+.qa p + p{padding-top:0;margin-top:-.6rem}
+
+.cta{border:1px solid var(--accent-line);border-radius:var(--r);background:linear-gradient(180deg,var(--accent-soft),transparent 45%),var(--surface);padding:clamp(1.5rem,4vw,2.75rem);text-align:center}
+.cta h2{font-size:clamp(1.6rem,3.4vw,2.35rem);letter-spacing:-.028em;margin-bottom:.75rem}
+.cta p{color:var(--muted);max-width:56ch;margin:0 auto 1.6rem;line-height:1.62}
+.cta .row{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+
+footer{border-top:1px solid var(--border);background:var(--bg-deep);padding-block:2.5rem 1.75rem}
+.f-bot{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.6875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+.f-bot a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+.f-bot a:hover{color:var(--accent)}
+.skip{position:absolute;left:-999px;top:0;z-index:200;background:var(--accent);color:var(--accent-ink);padding:.6rem 1rem;border-radius:0 0 8px 0}
+.skip:focus{left:0}
+</style>
+</head>
+<body>
+<a class="skip" href="#fit">Skip to content</a>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a href="../" class="brand" aria-label="Resume Rubric home">
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="22" height="22" rx="6" fill="var(--accent)"/>
+        <path d="M6.5 12.2l3.2 3.3 7.8-7.4" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      resume rubric<span style="color:var(--accent)">.</span>
+    </a>
+    <div class="nav-links">
+      <a class="hideable" href="#fit">Who it serves</a>
+      <a class="hideable" href="#privacy">Data handling</a>
+      <a class="hideable" href="#deploy">Deployment</a>
+      <a class="hideable" href="#pricing">Pricing</a>
+      <a href="../">The tool</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="pill"><b>For organizations</b> Career centers · Workforce boards · Veteran programs</span>
+    <h1>The resume tool your <span class="serif">legal team</span> can approve in one meeting.</h1>
+    <p class="lede" style="margin-top:1.4rem;font-size:clamp(1rem,1.6vw,1.1875rem)">
+      Resume Rubric scores a resume against a real job posting, shows the exact line behind every
+      finding, and rewrites the weak bullets. It all runs in the browser. No account, no upload, and
+      no resume ever reaches a server, including ours.
+    </p>
+    <div class="hero-cta">
+      <a href="../" class="btn btn-primary">Try it now, no signup</a>
+      <a href="#contact" class="btn btn-ghost">Talk about a pilot</a>
+    </div>
+    <p class="fig" style="margin-top:1.5rem">
+      Open source under AGPL-3.0 &middot; self-hosting supported &middot; covers healthcare, trades, education and government
+    </p>
+  </div>
+</header>
+
+<section class="sec" id="fit">
+  <div class="wrap">
+    <span class="eyebrow">The problem</span>
+    <h2 class="h2">Three reasons your current tool sits unused.</h2>
+    <div class="grid-3" style="margin-top:2.25rem">
+      <div class="card">
+        <span class="num">01</span>
+        <h3>It was built for software jobs</h3>
+        <p>Most resume tools are built around tech jobs and tech keywords. The people you serve are more often
+        nurses, electricians, CDL drivers, teachers, caseworkers and warehouse leads. Advice written for engineers tells a welder to
+        measure their "impact" and nothing useful comes out.</p>
+      </div>
+      <div class="card">
+        <span class="num">02</span>
+        <h3>Buying stalls on the data question</h3>
+        <p>Any tool that uploads a resume is holding names, addresses, phone numbers and job history for
+        people who may be under 18, veterans, or coming out of prison. That means a security review, a data
+        agreement and a retention policy. Most pilots die right there.</p>
+      </div>
+      <div class="card">
+        <span class="num">03</span>
+        <h3>Nobody can explain the score</h3>
+        <p>A tool that says 62 out of 100 and will not say why is no use in a session. Advisors cannot build a lesson around it, and the person
+        cannot fix anything without paying to see what is wrong.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="privacy">
+  <div class="wrap">
+    <div class="grid-2">
+      <div>
+        <span class="eyebrow">Data handling</span>
+        <h2 class="h2">There is no server to review.</h2>
+        <p class="lede" style="margin-top:1.15rem">
+          The whole tool, every word list and every scoring rule, is inside the web page itself.
+          The work happens on the person's own computer. The server sends one file and receives
+          nothing back.
+        </p>
+        <p class="lede" style="margin-top:1rem">
+          You do not have to take our word for it. Your own IT staff can check it in about a minute. Open the browser network tab and run a resume
+          through it.
+        </p>
+        <p class="lede" style="margin-top:1rem">
+          It also means most of the paperwork does not apply. We never handle personal data, so there is
+          nothing for a data agreement to cover, no retention schedule to write, and no breach to plan for.
+        </p>
+      </div>
+      <div class="proof">
+        <h3>What that means on paper</h3>
+        <p>The questions a security review asks, and the straight answers.</p>
+        <ul class="checks">
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
+            <span><b>Where is participant data stored?</b> On their own device only, in browser storage they can wipe with one button.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
+            <span><b>What do you retain?</b> Nothing. There is no server, no database and no accounts.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
+            <span><b>Any third party processors?</b> None. No analytics, no trackers, no ad pixels, no outside services.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
+            <span><b>Can we host it ourselves?</b> Yes. It is one file under AGPL-3.0. Put it behind your own login if you want.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg>
+            <span><b>Can we audit the code?</b> Yes, all of it, in public. That is what the license is for.</span></li>
+        </ul>
+        <div class="term">
+          <span class="ok">$</span> open devtools &rarr; network tab &rarr; analyze a resume<br>
+          <span class="ok">&#10003;</span> requests made: <b>0</b>
+        </div>
+      </div>
+    </div>
+    <p class="fig" style="margin-top:1.1rem">
+      The job search is the one exception, and nothing happens until the person presses the button. It
+      reads public job listings and sends nothing about them.
+    </p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">Population fit</span>
+    <h2 class="h2">Built for the people you actually serve.</h2>
+    <p class="lede" style="margin-top:1rem;margin-bottom:2rem">
+      Each field has its own word list, the sections it expects, the licenses it looks for, and the kind
+      of number that counts as proof in that line of work. A welder is not graded like a product manager.
+    </p>
+    <div class="pops">
+      <div class="pop"><b>Healthcare</b><span>Patient volume, acuity, outcomes. Looks for license, BLS, ACLS, NPI.</span></div>
+      <div class="pop"><b>Skilled trades</b><span>Hours, code compliance, safety record. Looks for OSHA, journeyman, CDL.</span></div>
+      <div class="pop"><b>Education</b><span>Cohort size, growth data, differentiation. Looks for certification and endorsements.</span></div>
+      <div class="pop"><b>Government</b><span>Grade series, clearance, statute work, caseload and people served.</span></div>
+      <div class="pop"><b>Operations</b><span>Throughput, cost per unit, on-time rate, headcount managed.</span></div>
+      <div class="pop"><b>Finance</b><span>Portfolio size, variance, close cycles, controls. Looks for CPA, CFA, Series.</span></div>
+      <div class="pop"><b>Sales &amp; marketing</b><span>Quota attainment, pipeline, retention, deal size.</span></div>
+      <div class="pop"><b>Technology</b><span>Scope, stack, ownership, system scale. Covered, but not the only one.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">What advisors get</span>
+    <h2 class="h2">A score you can teach from.</h2>
+    <div class="tbl-wrap" style="margin-top:2rem">
+      <table>
+        <thead><tr><th>Capability</th><th>Why it helps in a session</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A published rubric</strong><small>Six weighted dimensions, all thresholds public</small></td>
+              <td>An advisor can show exactly where the points went and why. The rubric works as a lesson plan on its own.</td></tr>
+          <tr><td><strong>Every finding cites a line</strong><small>Quoted, with its position in the document</small></td>
+              <td>Ends the argument. People see their own sentence next to what is wrong with it.</td></tr>
+          <tr><td><strong>Measured action plan</strong><small>Each fix carries a real point value</small></td>
+              <td>The tool makes the fix on a copy, scores it again, and shows the difference. Advisors can rank fixes by what they are worth instead of guessing.</td></tr>
+          <tr><td><strong>It never invents a metric</strong><small>Marks the blank and stops</small></td>
+              <td>Nobody gets talked into a claim they cannot back up. The blank is where the coaching happens.</td></tr>
+          <tr><td><strong>ATS-safe export</strong><small>Clean .docx, then re-read and rescored to prove it parses</small></td>
+              <td>Answers the "will this file work" question by showing it, instead of just saying so.</td></tr>
+          <tr><td><strong>Interview questions from their own bullets</strong><small>Generated from what they actually wrote</small></td>
+              <td>Turns one resume session into interview practice with no extra prep.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="deploy">
+  <div class="wrap">
+    <span class="eyebrow">Deployment</span>
+    <h2 class="h2">Three ways to run it.</h2>
+    <div class="tbl-wrap" style="margin-top:2rem">
+      <table>
+        <thead><tr><th>Option</th><th>What is involved</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hosted</strong></td>
+              <td>Use the public instance, or a branded one on your own subdomain. Nothing to install.<small>Set up in a day.</small></td>
+              <td>Programs with no IT help, or a pilot you want running this week.</td></tr>
+          <tr><td><strong>Self-hosted</strong></td>
+              <td>One file plus a small program, on your own servers, inside your network if you want.<small>Your IT owns the deployment. Updates pulled when you choose.</small></td>
+              <td>Places whose rules say everything has to run on their own systems.</td></tr>
+          <tr><td><strong>Embedded</strong></td>
+              <td>Dropped into a page you already have.<small>It is one page that needs nothing else, so it drops in cleanly.</small></td>
+              <td>Job portals and course pages people already log into.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fig" style="margin-top:1.1rem">
+      The AGPL-3.0 license lets you host and change it yourself. If you run a changed version as a
+      service for others, the license asks you to publish your changes.
+    </p>
+  </div>
+</section>
+
+<section class="sec" id="pricing">
+  <div class="wrap">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="h2">One yearly price, not per person.</h2>
+    <p class="lede" style="margin-top:1rem;margin-bottom:2.25rem">
+      Paying per person means paying more for helping more people, which is backwards. Help ten or ten
+      thousand for the same price.
+    </p>
+    <div class="prices">
+      <div class="price">
+        <h3>Pilot</h3>
+        <p class="psub">One program, one term.</p>
+        <div class="amt"><b>Free</b></div>
+        <p class="fine">no contract, no card</p>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> The full tool, no limits</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> A training session for your advisors</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Written answers for your security review</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Start a pilot</a>
+      </div>
+      <div class="price hi">
+        <span class="ptag">Most programs</span>
+        <h3>Program</h3>
+        <p class="psub">One department, center or office.</p>
+        <div class="amt"><b>$3,000</b><span>/year</span></div>
+        <p class="fine">billed yearly, PO accepted</p>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Unlimited people, no counting seats</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Your branding and your subdomain</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Field settings tuned to the people you serve</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Advisor training and email support</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Request a quote</a>
+      </div>
+      <div class="price">
+        <h3>Institution</h3>
+        <p class="psub">Whole campus, agency or system.</p>
+        <div class="amt"><b>$9,000</b><span>/year</span></div>
+        <p class="fine">starting price, scaled to size</p>
+        <ul>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Everything in Program, across every department</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Self-hosted or built into your own site, with support</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> Custom rubric weights for your reporting</li>
+          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg> A named contact and a promised response time</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Talk it through</a>
+      </div>
+    </div>
+    <p class="fig" style="margin-top:1.2rem">
+      The tool stays free for individuals, always. You are paying for hosting under your name, tuning,
+      training and support, not for access.
+    </p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <span class="eyebrow">Procurement questions</span>
+    <h2 class="h2" style="margin-bottom:2rem">Straight answers, including what is missing.</h2>
+    <div class="faq">
+      <details class="qa" open>
+        <summary>What happens to a participant's resume?</summary>
+        <p>It stays in the browser tab. It is read by JavaScript already on their machine, scored there, and never sent anywhere. If they save a version, it goes to that browser's local storage on that device, and one button deletes all of it. Close the tab without saving and nothing is left anywhere.</p>
+      </details>
+      <details class="qa">
+        <summary>Do we need a data processing agreement?</summary>
+        <p>Almost certainly not, because we never handle the data. Nothing is handled on a server, nothing is stored, and no outside company is involved. We are not lawyers and your counsel should check it against your own policy, but there is usually nothing for the agreement to cover.</p>
+      </details>
+      <details class="qa">
+        <summary>Is it accessible?</summary>
+        <p>It is built to be. You can use the whole thing with a keyboard. Headings and landmarks are marked up properly, tab controls carry ARIA roles, focus outlines are visible, and it honors reduced motion settings. Every piece of text has been checked against WCAG AA contrast in both light and dark modes. It has not been checked by an outside accessibility firm. If you need a VPAT, tell us early and we will sort out how to get one.</p>
+      </details>
+      <details class="qa">
+        <summary>Does it integrate with our SSO or student system?</summary>
+        <p>Not today. There is no account system to attach an identity to, which is the same choice that removes the privacy problem. If you self-host, you can put it behind your existing login at the network level. Closer integration is work we would have to do, and worth talking about if you really need it.</p>
+      </details>
+      <details class="qa">
+        <summary>What reporting do we get?</summary>
+        <p>Honestly, very little right now, and for the same reason: with no server there is nothing collecting usage. Summary reporting that does not break the privacy promise is the next thing being built, and pilot partners get to say what it should measure. If funder reporting is a hard requirement today, say so before you commit.</p>
+      </details>
+      <details class="qa">
+        <summary>Who is behind this, and what if you disappear?</summary>
+        <p>It is built and looked after by one person. That is a fair question about any small company. The license is the answer: it is open source under AGPL-3.0, so the whole working product is public and yours to keep running. Self-host it and nothing that happens to us can take it away from the people you serve.</p>
+      </details>
+      <details class="qa">
+        <summary>Is the score the same one an employer's system produces?</summary>
+        <p>No, and be careful with anyone who says otherwise. Workday, Greenhouse, Taleo and iCIMS all rank differently and none publish their formula. What this scores is the set of things all of them are known to check, plus the writing standards a human applies afterwards. It is practice, not a final answer, and the rubric says so on the page.</p>
+      </details>
+      <details class="qa">
+        <summary>How do we evaluate it without a procurement process?</summary>
+        <p>Just open it and use it. There is no signup, no trial and no sales call, so an advisor can try it on a real job posting in five minutes and tell you if it is worth a meeting.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Start with one program, one term.</h2>
+      <p>
+        A pilot is free and needs no contract. The best first call is not a demo. It is fifteen minutes on what you give people now and where it
+        falls short.
+      </p>
+      <div class="row">
+        <a href="mailto:vfranmer29@gmail.com?subject=Resume%20Rubric%20pilot" class="btn btn-primary">Email about a pilot</a>
+        <a href="../" class="btn btn-ghost">Open the tool first</a>
+      </div>
+      <p style="margin-top:1.25rem;font-size:.9375rem;color:var(--muted)">
+        Or write to <a href="mailto:vfranmer29@gmail.com" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px">vfranmer29@gmail.com</a>
+      </p>
+      <p class="fig" style="margin-top:.9rem">
+        Tell us your organization, roughly how many people you help a year, and the kind of work they do.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap f-bot">
+    <span>&copy; 2026 Resume Rubric</span>
+    <span>AGPL-3.0 &middot; <a href="https://github.com/fmercadx/resume-rubric" target="_blank" rel="noopener">Source</a> &middot; <a href="../">The tool</a></span>
+  </div>
+  <div class="wrap" style="margin-top:1rem;font-size:.8125rem;color:var(--faint);line-height:1.9">
+    Guides by field:
+    <a href="../nurse-resume-checker/" style="color:var(--faint)">Nurses</a> &middot;
+    <a href="../electrician-resume-checker/" style="color:var(--faint)">Electricians and trades</a> &middot;
+    <a href="../teacher-resume-checker/" style="color:var(--faint)">Teachers</a> &middot;
+    <a href="../cdl-driver-resume-checker/" style="color:var(--faint)">Drivers and warehouse</a> &middot;
+    <a href="../accountant-resume-checker/" style="color:var(--faint)">Accounting and finance</a> &middot;
+    <a href="../free-resume-checker-no-signup/" style="color:var(--faint)">No signup checker</a> &middot;
+    <a href="../ats-resume-checker/" style="color:var(--faint)">ATS checker</a> &middot;
+    <a href="../veteran-resume-checker/" style="color:var(--faint)">Veterans</a>
+  </div>
+  <div class="wrap f-bot" style="border:none;margin:0;padding:0">
+  </div>
+</footer>
+</body>
+</html>

@@ -10,13 +10,22 @@ const path = require("path");
 
 const OUT = path.join(__dirname, "docs");
 const DATA = JSON.parse(fs.readFileSync(path.join(__dirname, "fields.json"), "utf8"));
-const SITE = process.env.SITE_URL || "https://fmercadx.github.io/resume-rubric";
+/* Where these files are served from. */
+const MIRROR = "https://fmercadx.github.io/resume-rubric";
+/* Where the real site lives. Canonical tags point here, so a search engine treats
+   this build as a copy of that site rather than a second site competing with it. */
+const SITE = process.env.SITE_URL || "https://resume-rubric-production.up.railway.app";
 
 function esc(t) {
   return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 /* depth 0 is docs/index.html, depth 1 is docs/something/index.html */
+function noindex(html) {
+  return html.replace(/<meta name="robots"[^>]*>/,
+    '<meta name="robots" content="noindex, follow">');
+}
+
 function relink(html, depth) {
   const up = depth === 0 ? "" : "../";
   let s = html;
@@ -164,31 +173,24 @@ let app = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
 app = relink(app, 0).split(SITE.replace(/\/$/, "") + "/").join(SITE + "/");
 app = app.replace(/<link rel="canonical" href="[^"]*">/, '<link rel="canonical" href="' + SITE + '/">');
 app = app.replace(/<meta property="og:url" content="[^"]*">/, '<meta property="og:url" content="' + SITE + '/">');
-fs.writeFileSync(path.join(OUT, "index.html"), app);
+fs.writeFileSync(path.join(OUT, "index.html"), noindex(app));
 
 let org = fs.readFileSync(path.join(__dirname, "organizations.html"), "utf8");
 org = dropStats(relink(org, 1));
 org = org.replace(/<link rel="canonical" href="[^"]*">/, '<link rel="canonical" href="' + SITE + '/for-organizations/">');
 org = org.replace(/<meta property="og:url" content="[^"]*">/, '<meta property="og:url" content="' + SITE + '/for-organizations/">');
 fs.mkdirSync(path.join(OUT, "for-organizations"), { recursive: true });
-fs.writeFileSync(path.join(OUT, "for-organizations", "index.html"), org);
+fs.writeFileSync(path.join(OUT, "for-organizations", "index.html"), noindex(org));
 
 DATA.fields.forEach(f => {
   fs.mkdirSync(path.join(OUT, f.slug), { recursive: true });
-  fs.writeFileSync(path.join(OUT, f.slug, "index.html"), fieldPage(f));
+  fs.writeFileSync(path.join(OUT, f.slug, "index.html"), noindex(fieldPage(f)));
 });
 
-const urls = ["/", "/for-organizations/"].concat(DATA.fields.map(f => "/" + f.slug + "/"));
-const today = new Date().toISOString().slice(0, 10);
-fs.writeFileSync(path.join(OUT, "sitemap.xml"),
-  '<?xml version="1.0" encoding="UTF-8"?>' +
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-  urls.map(u => "<url><loc>" + SITE + u + "</loc><lastmod>" + today +
-    "</lastmod><changefreq>weekly</changefreq><priority>" + (u === "/" ? "1.0" : "0.8") + "</priority></url>").join("") +
-  "</urlset>");
 
-fs.writeFileSync(path.join(OUT, "robots.txt"),
-  "User-agent: *\nAllow: /\nSitemap: " + SITE + "/sitemap.xml\n");
+
+/* the copy stays out of search results, the real site carries the sitemap */
+fs.writeFileSync(path.join(OUT, "robots.txt"), "User-agent: *\nDisallow: /\n");
 
 console.log("built " + (2 + DATA.fields.length) + " pages into docs/");
-urls.forEach(u => console.log("  " + u));
+console.log("  mirror of " + SITE + ", not indexed");

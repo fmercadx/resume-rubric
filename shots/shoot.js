@@ -10,7 +10,11 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
-const SITE = process.env.SITE || "https://resume-rubric-production.up.railway.app/";
+/* Shoots the local server by default, so the screenshots always match the code in
+   this folder. Pointing it at the live site instead would quietly produce shots of
+   whatever was last deployed. Start the server first, then run this. To shoot the
+   live site on purpose, set SITE. */
+const SITE = process.env.SITE || "http://localhost:8731/";
 const OUT = path.join(__dirname, "..", "app", "store", "screenshots");
 const wait = ms => new Promise(r => setTimeout(r, ms));
 

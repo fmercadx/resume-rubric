@@ -63,10 +63,6 @@ const SHOTS = [
       await page.evaluate(() => document.getElementById("verifyRt").click());
       await wait(3500);
       await frame(page, "#rtResult", 64);
-      await page.evaluate(() => {
-        const w = document.querySelector("#rtResult .tbl-wrap");
-        if (w) w.scrollLeft = w.scrollWidth;
-      });
       await wait(300);
     }
   },

@@ -37,7 +37,8 @@ You get:
 ## Google Play, step by step
 
 1. Sign up at **play.google.com/console** and pay the $25
-2. **Create app**, name it `Resume Rubric`, pick English, choose **App** and **Free**
+2. **Create app**, name it `Resume Rubric`, pick English, choose **App** and **Paid**.
+   Paid cannot be undone later on Play, see PRICING.md
 3. Fill in the sections it marks as required. The text you need is at the bottom of
    this file, ready to paste
 4. Under **Privacy policy**, paste:
@@ -129,7 +130,7 @@ PRIVATE BY DESIGN
 Everything runs on your device. There is no server to send your resume to and no
 account to create. Turn off your data and it still works.
 
-Free, with no adverts and nothing locked away.
+One payment. No subscription, no adverts, and nothing inside the app is locked away.
 ```
 
 **Category:** Productivity, or Business

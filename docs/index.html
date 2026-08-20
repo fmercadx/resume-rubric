@@ -4989,7 +4989,11 @@ function initTabs(root){
 }
 initTabs($("res"));
 var wsSelect=initTabs($("ws"));
-$("backupLink").addEventListener("click",function(){ wsSelect(4); });
+/* this link lives in the pricing section, which the app build strips out, so
+   it is not always on the page. Unguarded it threw on startup and killed
+   everything set up after it, including the theme. */
+var backupLink=$("backupLink");
+if(backupLink) backupLink.addEventListener("click",function(){ wsSelect(4); });
 
 /* theme */
 var moon='<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>';

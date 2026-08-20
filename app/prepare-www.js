@@ -93,6 +93,42 @@ html.in-app .nav{ padding-top:env(safe-area-inset-top) }
 html.in-app body{ padding-bottom:env(safe-area-inset-bottom) }
 </style>`);
 
+/* 6. The app is sold, the website is not. The page carries a pricing section that
+      says the product is free and costs $0 always. That is true of the website and
+      flatly untrue of the thing the buyer just paid for, so it comes out of the app
+      build only.
+
+      This removes a contradiction, it does not hide anything. The comparison table
+      still says the full analysis is on the landing page with no email and no card,
+      because that is true and a buyer is entitled to know it. */
+const PRICING_START = "<!-- ===================== PRICING ===================== -->";
+const PRICING_END = "<!-- ===================== FAQ ===================== -->";
+const cutFrom = html.indexOf(PRICING_START), cutTo = html.indexOf(PRICING_END);
+if (cutFrom < 0 || cutTo < 0 || cutTo < cutFrom) {
+  console.error("  could not find the pricing section to remove");
+  process.exit(1);
+}
+html = html.slice(0, cutFrom) + html.slice(cutTo);
+
+/* the two links that pointed at it would now scroll nowhere */
+html = html.split("\n").filter(line => !line.includes('href="#pricing"')).join("\n");
+
+/* share cards and the structured data both announce a free product */
+html = html.split('content="Free resume checker with a published rubric"')
+           .join('content="Resume checker with a published rubric"');
+html = html.replace('"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},', "");
+
+/* a tip line makes no sense in something already bought */
+html = html.replace("This is free and it stays free. If it helped you, you can chip in.",
+                    "If this helped, you can chip in.");
+
+const leftovers = ["The product is free", 'href="#pricing"', '"price":"0"'];
+const found = leftovers.filter(t => html.includes(t));
+if (found.length) {
+  console.error("  price claims still in the app build: " + found.join(", "));
+  process.exit(1);
+}
+
 fs.writeFileSync(path.join(WWW, "index.html"), html);
 
 ["icon-192.png", "icon-512.png", "apple-touch-icon.png"].forEach(f =>

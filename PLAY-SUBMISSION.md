@@ -69,7 +69,7 @@ complete identity verification. The fee is once, not yearly.
 | App name | `Resume Rubric` |
 | Default language | English (United States) |
 | App or game | App |
-| Free or paid | Free |
+| Free or paid | **Paid**. This cannot be changed later, see PRICING.md |
 
 Tick the declarations and create.
 
@@ -168,7 +168,7 @@ PRIVATE BY DESIGN
 Everything runs on your device. There is no server to send your resume to and no
 account to create. Turn off your data and it still works.
 
-Free, with no adverts and nothing locked away.
+One payment. No subscription, no adverts, and nothing inside the app is locked away.
 ```
 
 **Graphics**

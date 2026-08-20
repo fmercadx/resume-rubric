@@ -95,7 +95,7 @@ Resume checker that explains
 
 **Promotional text**, 170 characters, editable any time without review
 ```
-Free, private, works offline. Score your resume against a real job posting and see the exact line behind every point.
+Private, and works with no connection. Score your resume against a real job posting and see the exact line behind every point.
 ```
 
 **Description**
@@ -133,7 +133,7 @@ PRIVATE BY DESIGN
 Everything runs on your device. There is no server to send your resume to and no
 account to create. Turn off your data and it still works.
 
-Free, with no adverts and nothing locked away.
+One payment. No subscription, no adverts, and nothing inside the app is locked away.
 ```
 
 **Keywords**, 100 characters total, comma separated
@@ -153,7 +153,7 @@ https://resume-rubric-production.up.railway.app/privacy
 
 **Category:** Primary Productivity, Secondary Business
 **Age rating:** 4+, answer No to everything in the questionnaire
-**Price:** Free
+**Price:** $4.99, one time. See PRICING.md.
 
 **Screenshots:** the six `ios67-*.png` files from `app/store/screenshots/`. They are
 1290 x 2796, which is the 6.7 inch size. Apple reuses them for smaller phones, so

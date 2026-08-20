@@ -50,7 +50,7 @@ const HTML = `<!doctype html>
     </div>
     <h1>Know why your resume<br>is <em>losing</em>, line by line.</h1>
     <p>Scores against the real job posting. Shows its whole rubric. Never invents a number.</p>
-    <div class="tags"><b>Free</b><b>No signup</b><b>Works offline</b></div>
+    <div class="tags"><b>No signup</b><b>Works offline</b><b>Nothing uploaded</b></div>
   </div>
   <div class="right">
     <svg class="dial" viewBox="0 0 260 260">

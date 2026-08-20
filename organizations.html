@@ -138,22 +138,22 @@ thead th{font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-tr
     padding:0 .9rem;margin-bottom:.7rem;
   }
   .stacks tbody tr:last-child{margin-bottom:0}
-  .stacks tbody td{
-    padding:.6rem 0;border-bottom:1px solid var(--border);
-    display:grid;grid-template-columns:7rem 1fr;gap:.75rem;align-items:start;
-  }
+  /* The column name sits above its value on its own line rather than beside it.
+     Beside it costs a third of the width to a gutter that is empty for every
+     line after the first, because a cell holds a verdict and a note, not one
+     string. */
+  .stacks tbody td{padding:.7rem 0;border-bottom:1px solid var(--border)}
   .stacks tbody tr td:last-child{border-bottom:none}
   .stacks tbody td::before{
-    content:attr(data-label);
+    content:attr(data-label);display:block;
     font-family:var(--mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--faint);line-height:1.9;
+    color:var(--faint);margin-bottom:.3rem;
   }
-  .stacks tbody td:first-child{display:block;font-weight:600;font-size:.9375rem;padding-top:.85rem}
-  .stacks tbody td:first-child::before{content:none}
-  /* a cell can hold more than a bare string, such as a <small> note. Without
-     this those become grid items of their own and land under the label. */
-  .stacks tbody td > *{grid-column:2}
-  .stacks tbody td:first-child > *{grid-column:auto}
+  /* the row's own name heads the card, so it needs no label of its own, whether
+     its column happens to be headed or blank */
+  .stacks tbody td:first-child{font-weight:600;font-size:.9375rem;padding-top:.85rem}
+  .stacks tbody td:first-child::before,
+  .stacks tbody td[data-label=""]::before{display:none}
 }
 tbody tr:last-child td{border-bottom:none}
 td strong{font-weight:600}

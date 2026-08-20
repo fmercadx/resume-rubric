@@ -412,6 +412,13 @@ select.sel:focus,input.inp:focus{outline:none;border-color:var(--accent-line)}
 .kwfit.empty{border-left-color:var(--border-strong);color:var(--faint)}
 .kwfit .tagl{display:block;font-family:var(--mono);font-size:.5625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.2rem}
 
+/* the one place money is mentioned, and only after the work is done */
+.support{
+  margin-top:1.5rem;padding:1rem 1.15rem;border:1px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface-2);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.support p{font-size:.875rem;color:var(--muted);line-height:1.5;margin:0;flex:1;min-width:220px}
+
 /* finish your resume: the three highest value steps in one place */
 .finish{border:1px solid var(--accent-line);border-radius:var(--r-sm);background:var(--surface-2);margin-bottom:1.5rem;overflow:hidden}
 .finish-top{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;background:linear-gradient(180deg,var(--accent-soft),transparent)}
@@ -1474,6 +1481,7 @@ Include the responsibilities and the requirements sections. The more of the post
           <li><a href="#rubric">Open rubric</a></li>
           <li><a href="https://github.com/fmercadx/resume-rubric" target="_blank" rel="noopener">Source code</a></li>
           <li><a href="/for-organizations">For organizations</a></li>
+          <!--SUPPORT_FOOTER-->
         </ul>
       </div>
     </div>
@@ -1494,6 +1502,21 @@ Include the responsibilities and the requirements sections. The more of the post
    ========================================================================== */
 (function(){
 "use strict";
+
+/* Put your payment link here and the two support lines appear. Leave it empty and
+   they stay hidden, so the site never shows a button that goes nowhere. */
+var SUPPORT_URL = "";
+
+function supportLine(style){
+  if(!SUPPORT_URL) return "";
+  if(style === "footer"){
+    return '<li><a href="' + SUPPORT_URL + '" target="_blank" rel="noopener">Chip in</a></li>';
+  }
+  return '<div class="support">' +
+    '<p>This is free and it stays free. If it helped you, you can chip in.</p>' +
+    '<a class="btn btn-ghost btn-sm" href="' + SUPPORT_URL + '" target="_blank" rel="noopener">Chip in</a>' +
+    '</div>';
+}
 
 /* -------------------------------------------------- lexicons */
 
@@ -4214,7 +4237,8 @@ function renderExport(state){
     '<div id="rtResult"></div>'+
     '<p style="font-size:.75rem;color:var(--faint);line-height:1.6;max-width:66ch;margin-top:1.1rem">'+
       'The file is built in this tab and never uploaded. If your browser blocks the download, '+
-      'use print, or copy the text from the editor above.</p>';
+      'use print, or copy the text from the editor above.</p>' +
+    supportLine();
 }
 
 function wireExport(state){
@@ -4922,6 +4946,14 @@ $("themeBtn").addEventListener("click",function(){
     var sel=$("fieldSel");
     if(sel) sel.value=want;
   }catch(e){}
+})();
+
+/* drop the footer link in only if a payment link has been set */
+(function(){
+  if(!SUPPORT_URL) return;
+  var host=document.querySelector("footer .f-grid ul");
+  var lists=document.querySelectorAll("footer .f-grid ul");
+  if(lists.length) lists[0].insertAdjacentHTML("beforeend", supportLine("footer"));
 })();
 
 counts();

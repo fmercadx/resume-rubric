@@ -1,0 +1,8 @@
+{
+  "appId": "app.resumerubric.checker",
+  "appName": "Resume Rubric",
+  "webDir": "www",
+  "server": { "androidScheme": "https" },
+  "android": { "backgroundColor": "#0B0E14" },
+  "ios": { "backgroundColor": "#0B0E14", "contentInset": "always" }
+}

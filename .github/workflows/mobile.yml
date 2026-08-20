@@ -1,0 +1,111 @@
+name: Build mobile apps
+
+# Runs when you ask it to, from the Actions tab. Public repos get free minutes,
+# including the macOS machines, so building the iPhone app costs nothing and does
+# not need a Mac of your own.
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Which app to build
+        required: true
+        default: both
+        type: choice
+        options: [both, android, ios]
+
+jobs:
+  android:
+    if: ${{ github.event.inputs.platform == 'both' || github.event.inputs.platform == 'android' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install
+        working-directory: app
+        run: npm install
+
+      - name: Bundle the web app into the shell
+        working-directory: app
+        run: node prepare-www.js && npx cap sync android
+
+      - name: Build the release bundle
+        working-directory: app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew bundleRelease --no-daemon
+
+      - name: Build an APK for testing on a phone
+        working-directory: app/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-play-store-bundle
+          path: app/android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-test-apk
+          path: app/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+  ios:
+    if: ${{ github.event.inputs.platform == 'both' || github.event.inputs.platform == 'ios' }}
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install
+        working-directory: app
+        run: npm install
+
+      - name: Bundle the web app into the shell
+        working-directory: app
+        run: node prepare-www.js && npx cap sync ios
+
+      - name: Install pods
+        working-directory: app/ios/App
+        run: pod install
+
+      # Builds without signing, which proves it compiles. Signing needs your Apple
+      # account, so the final upload happens from Xcode or Transporter.
+      - name: Build unsigned
+        working-directory: app/ios/App
+        run: |
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package the app
+        working-directory: app/ios/App
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -qry ResumeRubric-unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-build
+          path: app/ios/App/ResumeRubric-unsigned.ipa
+          if-no-files-found: error

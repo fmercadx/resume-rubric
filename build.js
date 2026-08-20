@@ -182,6 +182,11 @@ org = org.replace(/<meta property="og:url" content="[^"]*">/, '<meta property="o
 fs.mkdirSync(path.join(OUT, "for-organizations"), { recursive: true });
 fs.writeFileSync(path.join(OUT, "for-organizations", "index.html"), noindex(org));
 
+let priv = fs.readFileSync(path.join(__dirname, "privacy.html"), "utf8");
+priv = noindex(relink(priv, 1));
+fs.mkdirSync(path.join(OUT, "privacy"), { recursive: true });
+fs.writeFileSync(path.join(OUT, "privacy", "index.html"), priv);
+
 DATA.fields.forEach(f => {
   fs.mkdirSync(path.join(OUT, f.slug), { recursive: true });
   fs.writeFileSync(path.join(OUT, f.slug, "index.html"), noindex(fieldPage(f)));

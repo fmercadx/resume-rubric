@@ -11,10 +11,11 @@ const PORT = process.env.PORT || 3000;
 const FILE = path.join(__dirname, "index.html");
 const ORG_FILE = path.join(__dirname, "organizations.html");
 
-let html, orgHtml;
+let html, orgHtml, privacyHtml;
 try {
   html = fs.readFileSync(FILE);
   orgHtml = fs.readFileSync(ORG_FILE);
+  privacyHtml = fs.readFileSync(path.join(__dirname, "privacy.html"));
 } catch (e) {
   console.error("Could not read a page file:", e.message);
   process.exit(1);
@@ -283,6 +284,18 @@ const server = http.createServer((req, res) => {
     });
     if (req.method === "HEAD") return res.end();
     return res.end(f.body);
+  }
+
+  if (url === "/privacy" || url === "/privacy/" || url === "/privacy.html") {
+    res.writeHead(200, {
+      "content-type": "text/html; charset=utf-8",
+      "content-length": privacyHtml.length,
+      "cache-control": "public, max-age=3600",
+      "content-security-policy": CSP,
+      "x-content-type-options": "nosniff"
+    });
+    if (req.method === "HEAD") return res.end();
+    return res.end(privacyHtml);
   }
 
   if (url === "/robots.txt") {

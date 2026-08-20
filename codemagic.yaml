@@ -1,0 +1,112 @@
+# Codemagic build configuration.
+#
+# Codemagic reads this file when it builds, so the whole setup lives here rather
+# than in their web interface. You only have to connect the repo and add your
+# Apple key. Everything else is already described below.
+#
+# Two workflows:
+#   ios-testflight  builds, signs and sends to TestFlight so you can install it
+#                   on your own phone before anyone else sees it
+#   ios-appstore    the same build, submitted for App Store review
+
+definitions:
+  env_versions: &env_versions
+    node: 20
+    xcode: latest
+    cocoapods: default
+
+  build_steps: &build_steps
+    - name: Install dependencies
+      script: |
+        cd app
+        npm install
+    - name: Bundle the web app into the native shell
+      script: |
+        cd app
+        node prepare-www.js
+        npx cap sync ios
+    - name: Install CocoaPods
+      script: |
+        cd app/ios/App
+        pod install
+    - name: Set the build number
+      script: |
+        cd app/ios/App
+        # every upload needs a higher build number than the last one
+        agvtool new-version -all $(($BUILD_NUMBER + 1))
+    - name: Fetch signing files
+      script: |
+        keychain initialize
+        app-store-connect fetch-signing-files "$BUNDLE_ID" \
+          --type IOS_APP_STORE \
+          --create
+        keychain add-certificates
+        xcode-project use-profiles
+    - name: Build the app
+      script: |
+        cd app/ios/App
+        xcode-project build-ipa \
+          --workspace "App.xcworkspace" \
+          --scheme "App"
+
+workflows:
+  ios-testflight:
+    name: iPhone app, to TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    integrations:
+      app_store_connect: ResumeRubricKey
+    environment:
+      <<: *env_versions
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: app.resumerubric.checker
+      vars:
+        BUNDLE_ID: "app.resumerubric.checker"
+    scripts: *build_steps
+    artifacts:
+      - app/ios/App/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      email:
+        recipients:
+          - vfranmer29@gmail.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        # goes to TestFlight only, so you can try it before anyone else
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  ios-appstore:
+    name: iPhone app, submit for review
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    integrations:
+      app_store_connect: ResumeRubricKey
+    environment:
+      <<: *env_versions
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: app.resumerubric.checker
+      vars:
+        BUNDLE_ID: "app.resumerubric.checker"
+    scripts: *build_steps
+    artifacts:
+      - app/ios/App/build/ios/ipa/*.ipa
+    publishing:
+      email:
+        recipients:
+          - vfranmer29@gmail.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: true
+        # Apple holds it until you press release, rather than going live the
+        # moment review passes
+        release_type: MANUAL

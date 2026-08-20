@@ -57,21 +57,16 @@ The bundle ID has to match the app exactly. It is already set to that in
 
 This is the only genuinely awkward step. Three options, cheapest first.
 
-### Option A: Codemagic, free tier
+### Option A: Codemagic, free tier. Already set up.
 
-Codemagic builds iOS apps in the cloud, signs them, and uploads straight to App
-Store Connect. The free tier gives 500 build minutes a month, which is far more
-than you need for a small app.
+The build is fully described in `codemagic.yaml` at the root of this repo, so
+Codemagic reads it and knows what to do. Two workflows are defined, one that sends
+a build to TestFlight and one that submits for review.
 
-1. Sign in to codemagic.io with your GitHub account
-2. Add the `resume-rubric` repository
-3. Point it at `app/ios/App` as the project
-4. Connect your Apple account with an App Store Connect API key, which you create
-   under **Users and Access, Integrations** in App Store Connect
-5. Let Codemagic manage signing automatically
-6. Build, and it uploads for you
+Follow **CODEMAGIC-SETUP.md** for the parts that need your login. It is four short
+steps and takes about fifteen minutes.
 
-This is the route I would take. No Mac, no certificate wrangling by hand.
+No Mac, and no making certificates by hand.
 
 ### Option B: Borrow a Mac for an hour
 

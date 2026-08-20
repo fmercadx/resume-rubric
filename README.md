@@ -3,7 +3,7 @@
 A resume engine that scores, rewrites, and tracks a job search, running entirely in the
 browser. One HTML file, no framework, no build step, no dependencies.
 
-**Live:** https://resume-rubric-production.up.railway.app
+**Live:** https://fmercadx.github.io/resume-rubric
 
 ## What it does
 

@@ -20,3 +20,5 @@ app/android/app/build/
 app/android/.gradle/
 app/ios/App/Pods/
 app/ios/App/build/
+shots/node_modules/
+shots/package-lock.json

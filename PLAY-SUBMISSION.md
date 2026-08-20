@@ -22,13 +22,36 @@ Have these ready:
 A **personal** account created after November 2023 cannot publish publicly until it
 has run a closed test with **12 testers opted in for 14 continuous days**.
 
-An **organization** account is exempt, but needs a free D-U-N-S number which takes
-about a week to arrive.
+An **organization** account is exempt from that, but needs a free D-U-N-S number
+from Dun and Bradstreet. Google says that can take up to 30 days, and in practice
+people report 4 to 8 weeks. An organization account also expects a real registered
+business.
 
-Pick one before you sign up, because changing account type later is painful.
+| | Personal | Organization |
+|---|---|---|
+| D-U-N-S needed | No | Yes, 30 days to 8 weeks |
+| 12 testers for 14 days | Yes | No |
+| Real business needed | No | Yes |
+| Realistic time to live | **About 3 weeks** | 6 to 10 weeks |
 
-If you go personal, start the closed test on day one and fill in the rest of the
-listing while the 14 days run. That way nothing is wasted waiting.
+**Go personal.** Waiting two months to skip a two week test is a bad trade.
+
+Pick before you sign up, because changing account type later is painful.
+
+Start the closed test on day one and fill in the rest of the listing while the 14
+days run, so nothing is wasted waiting.
+
+### What a tester actually has to do
+
+Less than it sounds. They do not review anything or send feedback. They need to:
+
+1. Have a Google account
+2. Tap the opt in link you send them
+3. Leave it accepted for 14 days
+
+Twelve people who will tap a link once. If you cannot find twelve, there are groups
+where developers opt into each other's tests. Those are real people, which is what
+Google is asking for.
 
 ---
 

@@ -142,6 +142,19 @@ resume rubric<span style="color:var(--accent)">.</span></a></div></header>
 const FIELD_PAGES = {};
 (FIELD_DATA.fields || []).forEach(f => { FIELD_PAGES["/" + f.slug] = Buffer.from(fieldPage(f)); });
 
+/* Read once at startup, the same as the pages. */
+const STATIC = {};
+[
+  ["/manifest.webmanifest", "manifest.webmanifest", "application/manifest+json; charset=utf-8"],
+  ["/sw.js", "sw.js", "application/javascript; charset=utf-8"],
+  ["/icons/icon-192.png", "icons/icon-192.png", "image/png"],
+  ["/icons/icon-512.png", "icons/icon-512.png", "image/png"],
+  ["/icons/apple-touch-icon.png", "icons/apple-touch-icon.png", "image/png"]
+].forEach(([route, file, type]) => {
+  try { STATIC[route] = { body: fs.readFileSync(path.join(__dirname, file)), type: type }; }
+  catch (e) { console.error("missing " + file); }
+});
+
 const ROBOTS = "User-agent: *\nAllow: /\nDisallow: /stats\nSitemap: " + SITE + "/sitemap.xml\n";
 
 function sitemap() {
@@ -258,6 +271,18 @@ const server = http.createServer((req, res) => {
       "access-control-allow-origin": "*"
     });
     return res.end(JSON.stringify(summary(), null, 2));
+  }
+
+  /* the files that make it installable on a phone */
+  if (STATIC[url]) {
+    const f = STATIC[url];
+    res.writeHead(200, {
+      "content-type": f.type,
+      "content-length": f.body.length,
+      "cache-control": "public, max-age=86400"
+    });
+    if (req.method === "HEAD") return res.end();
+    return res.end(f.body);
   }
 
   if (url === "/robots.txt") {

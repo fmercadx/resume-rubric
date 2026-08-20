@@ -192,5 +192,11 @@ DATA.fields.forEach(f => {
 /* the copy stays out of search results, the real site carries the sitemap */
 fs.writeFileSync(path.join(OUT, "robots.txt"), "User-agent: *\nDisallow: /\n");
 
+/* the files that make it installable copy across unchanged */
+["manifest.webmanifest","sw.js"].forEach(f=>fs.copyFileSync(path.join(__dirname,f),path.join(OUT,f)));
+fs.mkdirSync(path.join(OUT,"icons"),{recursive:true});
+["icon-192.png","icon-512.png","apple-touch-icon.png"].forEach(f=>
+  fs.copyFileSync(path.join(__dirname,"icons",f),path.join(OUT,"icons",f)));
+
 console.log("built " + (2 + DATA.fields.length) + " pages into docs/");
 console.log("  mirror of " + SITE + ", not indexed");

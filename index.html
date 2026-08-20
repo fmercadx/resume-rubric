@@ -33,6 +33,14 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Free resume checker with a published rubric">
 <meta name="twitter:description" content="Score your resume against a job posting. Every finding cites the line it came from, and it never invents a number for you. No signup, and nothing is uploaded.">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0B0E14">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rubric">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
 /* ============================================================
    TOKENS
@@ -922,6 +930,10 @@ body.printing-resume #printResumeHost{
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" id="themeIcon">
           <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>
         </svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" id="installBtn" hidden title="Add Resume Rubric to your device">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M4 18v1a2 2 0 002 2h12a2 2 0 002-2v-1"/></svg>
+        Install
       </button>
       <a href="#analyzer" class="btn btn-primary btn-sm">Score my resume <span class="arrow">&rarr;</span></a>
     </div>
@@ -4954,6 +4966,27 @@ $("themeBtn").addEventListener("click",function(){
   var host=document.querySelector("footer .f-grid ul");
   var lists=document.querySelectorAll("footer .f-grid ul");
   if(lists.length) lists[0].insertAdjacentHTML("beforeend", supportLine("footer"));
+})();
+
+/* Offline support, and the install prompt on browsers that offer one.
+   Everything here is optional: if the browser has no service worker the tool still works. */
+(function(){
+  if("serviceWorker" in navigator && location.protocol === "https:"){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  }
+  var deferred=null;
+  window.addEventListener("beforeinstallprompt",function(e){
+    e.preventDefault(); deferred=e;
+    var b=$("installBtn");
+    if(b){ b.hidden=false; }
+  });
+  var b=$("installBtn");
+  if(b) b.addEventListener("click",function(){
+    if(!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function(){ deferred=null; b.hidden=true; });
+  });
+  window.addEventListener("appinstalled",function(){ var x=$("installBtn"); if(x) x.hidden=true; });
 })();
 
 counts();

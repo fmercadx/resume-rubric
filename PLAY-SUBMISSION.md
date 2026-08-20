@@ -1,0 +1,213 @@
+# Google Play, step by step
+
+Everything you need is already built. This is the order to do things in, and the
+exact answers to the questions the console asks.
+
+---
+
+## Before you start
+
+Have these ready:
+
+- **$25** and a card
+- **Photo ID.** Google verifies who you are now, and it can take a few days
+- The `.aab` file from the Actions tab of the repo
+- The screenshots from `app/store/screenshots/`, the six named `play-*`
+- The icon at `app/store/play-icon-512.png`
+
+---
+
+## The 12 tester rule, decide this first
+
+A **personal** account created after November 2023 cannot publish publicly until it
+has run a closed test with **12 testers opted in for 14 continuous days**.
+
+An **organization** account is exempt, but needs a free D-U-N-S number which takes
+about a week to arrive.
+
+Pick one before you sign up, because changing account type later is painful.
+
+If you go personal, start the closed test on day one and fill in the rest of the
+listing while the 14 days run. That way nothing is wasted waiting.
+
+---
+
+## 1. Sign up
+
+Go to **play.google.com/console**, sign in with a Google account, pay the $25, and
+complete identity verification. The fee is once, not yearly.
+
+## 2. Create the app
+
+**All apps** then **Create app**.
+
+| Field | Answer |
+|---|---|
+| App name | `Resume Rubric` |
+| Default language | English (United States) |
+| App or game | App |
+| Free or paid | Free |
+
+Tick the declarations and create.
+
+## 3. Work through Dashboard tasks
+
+The console gives you a checklist. These are the answers.
+
+### App access
+Choose **All functionality is available without special access**. There is no
+login, so this is true.
+
+### Ads
+**No, my app does not contain ads.** True, there are none.
+
+### Content rating
+Fill in the questionnaire. Everything is **No**: no violence, no sexual content,
+no profanity, no drugs, no gambling, no user to user communication, no sharing of
+location or personal information. You should come out rated for everyone.
+
+### Target audience
+Age group **18 and over**. It is a tool for people applying for jobs. Saying it is
+not aimed at children keeps you out of the extra rules that apply to family apps.
+
+### Data safety
+This is normally the hardest section and for your app it is the easiest, because
+the honest answer to nearly everything is no.
+
+| Question | Answer |
+|---|---|
+| Does your app collect or share any of the required user data types? | **No** |
+| Is all of the user data encrypted in transit? | Not applicable, nothing is sent |
+| Do you provide a way for users to request deletion? | **Yes**, they delete it themselves in the app |
+
+If it insists on detail, the truthful statement is that the app processes the
+resume entirely on the device and transmits nothing.
+
+### Privacy policy
+Paste this into the privacy policy box:
+
+```
+https://resume-rubric-production.up.railway.app/privacy
+```
+
+### Government apps
+No.
+
+### Financial features
+None.
+
+---
+
+## 4. Store listing
+
+**App name**
+```
+Resume Rubric
+```
+
+**Short description**, 80 characters maximum
+```
+Score your resume against any job. Private, offline, and it shows its work.
+```
+
+**Full description**
+```
+Resume Rubric scores your resume against a real job posting and shows you exactly
+what to fix.
+
+It works on your phone with no connection, and your resume never leaves the device.
+There is no account, no signup, and nothing is uploaded.
+
+WHAT IT DOES
+
+- Scores your resume out of 100 across six areas, and shows the exact line behind
+  every point it takes off
+- Publishes the whole scoring rubric, so you can see how the score was reached
+- Rewrites your weak bullet points into something a recruiter can act on
+- Guides you through the three fixes worth the most points
+- Exports a clean Word file, then reads it back to prove it still parses correctly
+- Writes interview questions from your own bullet points
+- Keeps your resume versions and job applications in one place
+
+BUILT FOR EVERY KIND OF WORK
+
+Nurses, electricians, teachers, drivers, accountants, veterans and office workers.
+Each field is scored on what actually counts as evidence in that job, not on rules
+written for software engineers.
+
+IT WILL NOT MAKE THINGS UP
+
+Where a number belongs and you have not given one, it marks the gap and stops. It
+will never write a figure onto your resume that you cannot defend in an interview.
+
+PRIVATE BY DESIGN
+
+Everything runs on your device. There is no server to send your resume to and no
+account to create. Turn off your data and it still works.
+
+Free, with no adverts and nothing locked away.
+```
+
+**Graphics**
+
+| Asset | File |
+|---|---|
+| App icon, 512 x 512 | `app/store/play-icon-512.png` |
+| Phone screenshots | the six `play-*.png` files |
+| Feature graphic, 1024 x 500 | `app/store/feature-graphic-1024x500.png` |
+
+**Category:** Productivity
+**Tags:** resume, job search, career
+**Contact email:** vfranmer29@gmail.com
+
+---
+
+## 5. Upload the app
+
+Go to **Release**, then either:
+
+- **Testing, Closed testing** if you took the personal account route. Create a track,
+  add your 12 testers by email, and start the clock
+- **Production** if you have an organization account
+
+Upload `app-release.aab`.
+
+When it asks about app signing, choose **Google Play App Signing** and let Google
+hold the key. That is the default and it means you never have to keep a key file
+safe yourself.
+
+## 6. Countries
+
+Select all countries, or just the ones you care about. There is no reason to limit
+it, the app works anywhere.
+
+## 7. Send for review
+
+Press **Send for review**. First reviews usually take a few days, sometimes longer
+for a brand new account.
+
+---
+
+## If it gets rejected
+
+The likely reasons and what to say.
+
+**Broken functionality.** Reviewers sometimes miss that they need to paste a job
+posting. In the review notes tell them to press **Load a sample**, which fills both
+boxes in one tap.
+
+**Minimum functionality.** Point out that the app works with no connection, reads
+and writes files on the device, and contains its own scoring engine rather than
+loading a web page.
+
+**Data safety mismatch.** If they question the "collects no data" answer, the app
+genuinely makes no network requests during use. They can verify it in aeroplane mode.
+
+---
+
+## After it is live
+
+The listing can be edited any time. Updates are a new `.aab` from the Actions tab,
+uploaded to a new release. Version numbers live in
+`app/android/app/build.gradle` as `versionCode` and `versionName`, and both need to
+go up for each release.

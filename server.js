@@ -127,6 +127,9 @@ resume rubric<span style="color:var(--accent)">.</span></a></div></header>
 <div class="note">Your resume is never uploaded. The whole scoring engine is inside the page, so it runs on your own machine. Turn off your wifi and it still works.</div>
 
 <a class="btn" href="/?field=${esc(f.key)}">Score my resume</a>
+<h2>Guides for other kinds of work</h2>
+<ul class="tags">${(FIELD_DATA.fields||[]).filter(o=>o.slug!==f.slug).map(o=>
+  '<li><a href="/'+o.slug+'" style="color:var(--muted)">'+esc(o.label||o.who.split(",")[0])+'</a></li>').join("")}</ul>
 </main>
 <footer class="wrap">
 <a href="/">The tool</a> &middot; <a href="/for-organizations">For organizations</a> &middot;

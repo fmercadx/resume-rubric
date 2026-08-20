@@ -16,9 +16,28 @@
         "nurses you precepted, and how many passed on the first attempt",
         "response times on rapid response or code events"
       ],
-      "creds": ["RN or LPN license", "BSN", "BLS", "ACLS", "PALS", "CNA", "NPI number", "board certification"],
-      "verbs": ["triaged", "assessed", "administered", "charted", "escalated", "stabilized", "precepted", "documented"],
-      "trap": "Most nursing resumes list duties every nurse shares. \"Provided patient care\" tells a manager nothing, because it is true of everyone applying. The fix is scope and outcome: how many patients, how sick, and what changed."
+      "creds": [
+        "RN or LPN license",
+        "BSN",
+        "BLS",
+        "ACLS",
+        "PALS",
+        "CNA",
+        "NPI number",
+        "board certification"
+      ],
+      "verbs": [
+        "triaged",
+        "assessed",
+        "administered",
+        "charted",
+        "escalated",
+        "stabilized",
+        "precepted",
+        "documented"
+      ],
+      "trap": "Most nursing resumes list duties every nurse shares. \"Provided patient care\" tells a manager nothing, because it is true of everyone applying. The fix is scope and outcome: how many patients, how sick, and what changed.",
+      "label": "Nurses"
     },
     {
       "slug": "electrician-resume-checker",
@@ -35,9 +54,27 @@
         "square footage of the facility",
         "units, machines or panels you maintained"
       ],
-      "creds": ["Journeyman or master license", "OSHA 10 or OSHA 30", "CDL", "AWS D1.1", "EPA 608", "apprenticeship hours"],
-      "verbs": ["fabricated", "installed", "inspected", "calibrated", "welded", "wired", "rigged", "commissioned", "serviced"],
-      "trap": "Trade resumes get judged on the same rules as everyone else, which is unfair but real. The winning move is numbers, because your work produces them naturally. Downtime, footage, voltage, incident free hours. Most people leave all of it off."
+      "creds": [
+        "Journeyman or master license",
+        "OSHA 10 or OSHA 30",
+        "CDL",
+        "AWS D1.1",
+        "EPA 608",
+        "apprenticeship hours"
+      ],
+      "verbs": [
+        "fabricated",
+        "installed",
+        "inspected",
+        "calibrated",
+        "welded",
+        "wired",
+        "rigged",
+        "commissioned",
+        "serviced"
+      ],
+      "trap": "Trade resumes get judged on the same rules as everyone else, which is unfair but real. The winning move is numbers, because your work produces them naturally. Downtime, footage, voltage, incident free hours. Most people leave all of it off.",
+      "label": "Electricians and trades"
     },
     {
       "slug": "teacher-resume-checker",
@@ -54,9 +91,24 @@
         "attendance or behavior referrals you reduced",
         "colleagues you mentored or trained"
       ],
-      "creds": ["State teaching certificate", "endorsements", "Praxis", "ESL or SPED certification", "master's degree"],
-      "verbs": ["differentiated", "assessed", "facilitated", "mentored", "scaffolded", "designed", "tutored"],
-      "trap": "Teaching resumes drift into philosophy. Districts screen for evidence. One line with growth data beats a paragraph about your approach to learning, because the first can be checked and the second cannot."
+      "creds": [
+        "State teaching certificate",
+        "endorsements",
+        "Praxis",
+        "ESL or SPED certification",
+        "master's degree"
+      ],
+      "verbs": [
+        "differentiated",
+        "assessed",
+        "facilitated",
+        "mentored",
+        "scaffolded",
+        "designed",
+        "tutored"
+      ],
+      "trap": "Teaching resumes drift into philosophy. Districts screen for evidence. One line with growth data beats a paragraph about your approach to learning, because the first can be checked and the second cannot.",
+      "label": "Teachers"
     },
     {
       "slug": "cdl-driver-resume-checker",
@@ -73,9 +125,25 @@
         "headcount you supervised",
         "cost per unit or per mile you cut"
       ],
-      "creds": ["CDL class A or B", "endorsements such as hazmat or tanker", "forklift certification", "OSHA", "DOT medical card", "clean MVR"],
-      "verbs": ["routed", "dispatched", "expedited", "staffed", "standardized", "streamlined", "loaded"],
-      "trap": "Driving and warehouse resumes often list equipment and leave out performance. Safety record and on time rate are the two numbers that get you called, and almost nobody puts them on the page."
+      "creds": [
+        "CDL class A or B",
+        "endorsements such as hazmat or tanker",
+        "forklift certification",
+        "OSHA",
+        "DOT medical card",
+        "clean MVR"
+      ],
+      "verbs": [
+        "routed",
+        "dispatched",
+        "expedited",
+        "staffed",
+        "standardized",
+        "streamlined",
+        "loaded"
+      ],
+      "trap": "Driving and warehouse resumes often list equipment and leave out performance. Safety record and on time rate are the two numbers that get you called, and almost nobody puts them on the page.",
+      "label": "Drivers and warehouse"
     },
     {
       "slug": "accountant-resume-checker",
@@ -92,9 +160,25 @@
         "audit findings closed",
         "cost savings you delivered"
       ],
-      "creds": ["CPA", "CFA", "Series 7 or 63", "GAAP", "SOX", "MBA"],
-      "verbs": ["reconciled", "forecasted", "audited", "modeled", "budgeted", "consolidated", "hedged"],
-      "trap": "Finance resumes say \"responsible for month end close\" instead of \"cut close from twelve days to seven\". The second one is the same job described in a way that can be checked."
+      "creds": [
+        "CPA",
+        "CFA",
+        "Series 7 or 63",
+        "GAAP",
+        "SOX",
+        "MBA"
+      ],
+      "verbs": [
+        "reconciled",
+        "forecasted",
+        "audited",
+        "modeled",
+        "budgeted",
+        "consolidated",
+        "hedged"
+      ],
+      "trap": "Finance resumes say \"responsible for month end close\" instead of \"cut close from twelve days to seven\". The second one is the same job described in a way that can be checked.",
+      "label": "Accounting and finance"
     },
     {
       "slug": "free-resume-checker-no-signup",
@@ -111,9 +195,23 @@
         "error or defect rate you reduced",
         "percentage improvement, with the starting point"
       ],
-      "creds": ["Licenses your field requires", "certifications", "degrees", "clearances"],
-      "verbs": ["led", "built", "cut", "delivered", "resolved", "increased", "standardized"],
-      "trap": "Most free resume checkers show you a score and put the fixes behind a signup. This one shows you everything, because the fixes are the only part that helps and the score on its own is useless."
+      "creds": [
+        "Licenses your field requires",
+        "certifications",
+        "degrees",
+        "clearances"
+      ],
+      "verbs": [
+        "led",
+        "built",
+        "cut",
+        "delivered",
+        "resolved",
+        "increased",
+        "standardized"
+      ],
+      "trap": "Most free resume checkers show you a score and put the fixes behind a signup. This one shows you everything, because the fixes are the only part that helps and the score on its own is useless.",
+      "label": "Free, no signup"
     },
     {
       "slug": "ats-resume-checker",
@@ -128,9 +226,20 @@
         "counts of people, dollars, units or hours",
         "time periods, so the reader knows the pace"
       ],
-      "creds": ["Whatever the posting names, in the same words it uses"],
-      "verbs": ["led", "built", "reduced", "delivered", "managed", "designed", "resolved"],
-      "trap": "No tool can tell you exactly what Workday or Taleo scored you, because none of them publish it. Be careful with any product that claims a real ATS score. What can be checked is whether your file parses, whether the posting's words appear, and whether your claims carry evidence."
+      "creds": [
+        "Whatever the posting names, in the same words it uses"
+      ],
+      "verbs": [
+        "led",
+        "built",
+        "reduced",
+        "delivered",
+        "managed",
+        "designed",
+        "resolved"
+      ],
+      "trap": "No tool can tell you exactly what Workday or Taleo scored you, because none of them publish it. Be careful with any product that claims a real ATS score. What can be checked is whether your file parses, whether the posting's words appear, and whether your claims carry evidence.",
+      "label": "Getting past the scanner"
     },
     {
       "slug": "veteran-resume-checker",
@@ -147,9 +256,23 @@
         "training hours delivered",
         "incidents avoided or safety record"
       ],
-      "creds": ["Security clearance and level", "GS series if applicable", "certifications earned in service", "licenses that transfer"],
-      "verbs": ["led", "coordinated", "trained", "administered", "briefed", "audited", "enforced"],
-      "trap": "The usual advice is to strip out all military language. That goes too far. The posting's words matter, so keep what maps cleanly and translate the rest. \"Accountable for $4M of equipment with zero losses\" needs no translation at all."
+      "creds": [
+        "Security clearance and level",
+        "GS series if applicable",
+        "certifications earned in service",
+        "licenses that transfer"
+      ],
+      "verbs": [
+        "led",
+        "coordinated",
+        "trained",
+        "administered",
+        "briefed",
+        "audited",
+        "enforced"
+      ],
+      "trap": "The usual advice is to strip out all military language. That goes too far. The posting's words matter, so keep what maps cleanly and translate the rest. \"Accountable for $4M of equipment with zero losses\" needs no translation at all.",
+      "label": "Veterans"
     }
   ]
 }

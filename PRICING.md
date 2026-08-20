@@ -84,13 +84,30 @@ Do this first. It is the slowest part and none of the rest works without it.
 
 ## Testing without charging your testers
 
-Google still wants 12 testers for 14 days on a personal account, and a paid app would
-normally charge them.
+Google wants 12 testers for 14 days on a personal account, and its documentation is
+blunt about what that costs on a paid app:
 
-In Play Console, go to **Setup**, then **License testing**, and add your testers' Gmail
-addresses there. They can then install without being charged. Set this up before you
-invite anyone, and confirm with the first tester that they were not asked to pay before
-you invite the other eleven.
+> Testers must purchase paid apps when participating in open or closed tests.
+> For paid apps, testers can install your internal test version for free.
+
+Internal testing is the one that is free, and internal testing does not count towards
+production access. The requirement is specifically a **closed** test. So by default
+your twelve testers would each be asked to pay $4.99 to do you a favour.
+
+**Use promo codes.** Play Console, **Monetize**, then **Promotions**. Create a one time
+promotion at 100% off and generate twelve codes. Send a code with each opt in link. The
+quarterly limit is 500 codes, so twelve is nothing.
+
+**Test this with one person first.** Send one tester the link and a code and confirm
+they were not charged before inviting the other eleven. Developers report the codes
+behaving inconsistently while an app is still unpublished, and finding that out with
+one person is much cheaper than with twelve.
+
+If the codes do not work, let the twelve pay and send each $4.99 back. You keep 85% of
+each sale, so twelve sales return about $50.88 and refunding $59.88 leaves you roughly
+$9 down. Cheap, but twelve awkward conversations.
+
+Apple has no tester minimum, so none of this applies there.
 
 ---
 

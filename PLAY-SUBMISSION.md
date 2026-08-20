@@ -14,6 +14,8 @@ Have these ready:
 - The `.aab` file from the Actions tab of the repo
 - The screenshots from `app/store/screenshots/`, the six named `play-*`
 - The icon at `app/store/play-icon-512.png`
+- A bank account and tax details, for the payments profile
+- Twelve people who will tap a link, and a promo code for each of them
 
 ---
 
@@ -55,10 +57,50 @@ Google is asking for.
 
 ---
 
+## Paid apps and the 12 testers, read this before creating the app
+
+Google's own documentation, on the page about setting up tests:
+
+> Testers must purchase paid apps when participating in open or closed tests.
+> For paid apps, testers can install your internal test version for free.
+
+And the requirement you have to satisfy is a **closed** test, not an internal one.
+Internal testing does not count towards production access.
+
+Put together, that means your twelve testers would each be asked to pay $4.99 to do
+you a favour. That is not a workable ask.
+
+**The way round it is promo codes.** In Play Console, under **Monetize**, then
+**Promotions**, you can generate one time codes that give 100% off. Send each tester
+a code with the opt in link and they install without paying. You get up to 500 codes
+per quarter, so twelve is nothing.
+
+**Check this with your first tester before you invite the other eleven.** Send one
+person the opt in link and a code, and confirm they were not charged. Developers
+report the codes behaving inconsistently while an app is still unpublished, and it is
+far better to find that out with one person than with twelve.
+
+If codes turn out not to work for you, the fallback is to let the twelve pay and send
+each of them $4.99 back. You receive 85% of each sale, so twelve sales at $4.99 return
+about $50.88 to you and refunding them $59.88 leaves you about $9 down. Cheap, but it
+is twelve awkward conversations.
+
+Neither of these applies to Apple. Apple has no tester minimum at all.
+
+---
+
 ## 1. Sign up
 
 Go to **play.google.com/console**, sign in with a Google account, pay the $25, and
 complete identity verification. The fee is once, not yearly.
+
+## 1b. Set up the payments profile, before you create the app
+
+A price does nothing until this exists, and it is the slowest part.
+
+**Setup**, then **Payments profile**. You are creating a Google payments merchant
+account: business or individual details, a bank account, and tax details. Do it now
+so it is settled by the time the rest is ready.
 
 ## 2. Create the app
 
@@ -72,6 +114,16 @@ complete identity verification. The fee is once, not yearly.
 | Free or paid | **Paid**. This cannot be changed later, see PRICING.md |
 
 Tick the declarations and create.
+
+## 2b. Set the price
+
+**Monetize**, then **Products**, then **App pricing**. Set **$4.99**.
+
+Play converts that into every other currency for you. Take the defaults unless you
+have a reason not to.
+
+Then generate the tester codes: **Monetize**, then **Promotions**, then create a
+one time promotion at 100% off and produce twelve codes.
 
 ## 3. Work through Dashboard tasks
 
@@ -190,8 +242,12 @@ One payment. No subscription, no adverts, and nothing inside the app is locked a
 Go to **Release**, then either:
 
 - **Testing, Closed testing** if you took the personal account route. Create a track,
-  add your 12 testers by email, and start the clock
+  add your 12 testers by email, and start the clock. Send each of them a promo code
+  with the opt in link, or they will be asked to pay
 - **Production** if you have an organization account
+
+Internal testing would let testers install a paid app for free, but it does not count
+towards production access. It has to be a closed test.
 
 Upload `app-release.aab`.
 

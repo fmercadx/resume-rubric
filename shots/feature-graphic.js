@@ -42,9 +42,10 @@ const HTML = `<!doctype html>
 </style></head><body>
   <div class="left">
     <div class="mark">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.4" fill="none" stroke="#F0B429" stroke-width="2.5" opacity=".22"/>
-      <circle cx="12" cy="12" r="7.4" fill="none" stroke="#F0B429" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="34.9 11.6" transform="rotate(-90 12 12)"/>
-      <path d="M9 12.1l2.1 2.1 4.2-4.5" fill="none" stroke="#F7F4EE" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="5.3" fill="#F0B429"/>
+      <circle cx="12" cy="12" r="7.56" fill="none" stroke="#0B0E14" stroke-width="2.5" opacity=".2"/>
+      <circle cx="12" cy="12" r="7.56" fill="none" stroke="#0B0E14" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="35.6 11.9" transform="rotate(-90 12 12)"/>
+      <path d="M9 12.12l2.09 2.09 4.22-4.49" fill="none" stroke="#0B0E14" stroke-width="2.16" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>resume rubric<span style="color:#F0B429">.</span></span>
     </div>
     <h1>Know why your resume<br>is <em>losing</em>, line by line.</h1>

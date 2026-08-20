@@ -1,25 +1,34 @@
 /* Draws the app icon as PNG, with no image library.
 
    The mark is the score dial from the app itself: a ring three quarters filled,
-   with a tick inside it. It reads as a score rather than as a generic checkmark,
-   and it still holds together at 32 pixels.
+   with a tick inside. It reads as a score rather than as a generic checkmark, and
+   it still holds together at 32 pixels.
+
+   The ground is amber and the mark is drawn in ink. A bright icon carries further
+   in a store grid than a dark one, and it can never sink into a dark wallpaper.
 
    Edges are smoothed by drawing at four times the size and averaging down, which
    is simpler to get right than working out coverage analytically.
 
-   Variants:
+   Variants, passed as options:
      round   circle instead of a rounded square, for Android round launchers
      fg      mark only on transparent, for the Android adaptive foreground
      square  hard corners and no alpha channel, which Apple requires
+     scale   shrinks the mark within the canvas, so the adaptive foreground keeps
+             its artwork inside the safe circle the launcher mask leaves visible
 */
 
 const zlib = require("zlib");
 
 const INK = [11, 14, 20];
 const AMBER = [240, 180, 41];
-const PAPER = [247, 244, 238];
 
 const SS = 4;                 // supersample factor
+
+/* Android gives an adaptive foreground a 108dp canvas but only guarantees the
+   middle 66dp is visible. The mark spans 0.734 of its own box, so shrinking the
+   box to this fraction lands the outer edge of the ring on 66/108. */
+const FG_SCALE = 0.83;
 
 function crcTable() {
   const t = new Int32Array(256);
@@ -64,8 +73,7 @@ function inArc(px, py, cx, cy, radius, halfWidth) {
     while (rel < 0) rel += Math.PI * 2;
     if (rel <= sweep) return true;
   }
-  // the round caps at each end
-  for (const angle of [start, start + sweep]) {
+  for (const angle of [start, start + sweep]) {          // the round caps
     const ex = cx + Math.cos(angle) * radius;
     const ey = cy + Math.sin(angle) * radius;
     if (Math.hypot(px - ex, py - ey) <= halfWidth) return true;
@@ -80,12 +88,16 @@ function inRing(px, py, cx, cy, radius, halfWidth) {
 /* one sample: returns [r,g,b,a] at 0..255 */
 function sample(x, y, S, opts) {
   const cx = S / 2, cy = S / 2;
-  const radius = S * 0.315;
-  const halfWidth = S * 0.052;
+  const k = S * opts.scale;                              // the box the mark is drawn in
+  const radius = k * 0.315;
+  const halfWidth = k * 0.052;
 
   // tick, proportioned to sit inside the ring
-  const t1 = [S * 0.375, S * 0.505], t2 = [S * 0.462, S * 0.592], t3 = [S * 0.638, S * 0.405];
-  const tickHalf = S * 0.045;
+  const off = (S - k) / 2;
+  const t1 = [off + k * 0.375, off + k * 0.505];
+  const t2 = [off + k * 0.462, off + k * 0.592];
+  const t3 = [off + k * 0.638, off + k * 0.405];
+  const tickHalf = k * 0.045;
 
   const onTick = Math.min(
     distToSeg(x, y, t1[0], t1[1], t2[0], t2[1]),
@@ -95,11 +107,11 @@ function sample(x, y, S, opts) {
   const onArc = inArc(x, y, cx, cy, radius, halfWidth);
   const onTrack = inRing(x, y, cx, cy, radius, halfWidth);
 
-  /* the adaptive foreground carries only the mark, on nothing */
+  /* the adaptive foreground carries only the mark, on nothing. The launcher paints
+     the amber behind it from the background layer. */
   if (opts.fg) {
-    if (onTick) return [PAPER[0], PAPER[1], PAPER[2], 255];
-    if (onArc) return [AMBER[0], AMBER[1], AMBER[2], 255];
-    if (onTrack) return [PAPER[0], PAPER[1], PAPER[2], 40];
+    if (onTick || onArc) return [INK[0], INK[1], INK[2], 255];
+    if (onTrack) return [INK[0], INK[1], INK[2], 51];    // the unearned part, 20 percent
     return [0, 0, 0, 0];
   }
 
@@ -117,54 +129,50 @@ function sample(x, y, S, opts) {
   }
   if (!inside) return [0, 0, 0, 0];
 
-  if (onTick) return [PAPER[0], PAPER[1], PAPER[2], 255];
-  if (onArc) return [AMBER[0], AMBER[1], AMBER[2], 255];
+  if (onTick || onArc) return [INK[0], INK[1], INK[2], 255];
   if (onTrack) {
-    // faint track, blended onto the background
-    const m = 0.16;
+    const m = 0.2;                                       // faint ink, blended onto the amber
     return [
-      Math.round(INK[0] + (PAPER[0] - INK[0]) * m),
-      Math.round(INK[1] + (PAPER[1] - INK[1]) * m),
-      Math.round(INK[2] + (PAPER[2] - INK[2]) * m),
+      Math.round(AMBER[0] + (INK[0] - AMBER[0]) * m),
+      Math.round(AMBER[1] + (INK[1] - AMBER[1]) * m),
+      Math.round(AMBER[2] + (INK[2] - AMBER[2]) * m),
       255
     ];
   }
-  return [INK[0], INK[1], INK[2], 255];
+  return [AMBER[0], AMBER[1], AMBER[2], 255];
 }
 
-function icon(size, round, fg, square) {
-  const opts = { round: !!round, fg: !!fg, square: !!square };
-  const bpp = square ? 3 : 4;
+function icon(size, options) {
+  const o = options || {};
+  const opts = {
+    round: !!o.round,
+    fg: !!o.fg,
+    square: !!o.square,
+    scale: o.scale || (o.fg ? FG_SCALE : 1)
+  };
+  const bpp = opts.square ? 3 : 4;
   const rows = [];
 
   for (let y = 0; y < size; y++) {
     const row = Buffer.alloc(size * bpp + 1);
     row[0] = 0;                                   // filter: none
     for (let x = 0; x < size; x++) {
-      // average SS x SS samples for a clean edge
-      let r = 0, g = 0, b = 0, a = 0;
+      let r = 0, g = 0, b = 0, a = 0;             // average SS x SS samples
       for (let sy = 0; sy < SS; sy++) {
         for (let sx = 0; sx < SS; sx++) {
-          const px = (x + (sx + 0.5) / SS) * (size / size);
-          const py = (y + (sy + 0.5) / SS) * (size / size);
-          const s = sample(px, py, size, opts);
+          const s = sample(x + (sx + 0.5) / SS, y + (sy + 0.5) / SS, size, opts);
           r += s[0] * s[3]; g += s[1] * s[3]; b += s[2] * s[3]; a += s[3];
         }
       }
-      const n = SS * SS;
-      const alpha = a / n;
-      const o = 1 + x * bpp;
+      const alpha = a / (SS * SS);
+      const p = 1 + x * bpp;
       if (alpha < 0.5) {
-        if (square) { row[o] = INK[0]; row[o + 1] = INK[1]; row[o + 2] = INK[2]; }
-        else { row[o] = 0; row[o + 1] = 0; row[o + 2] = 0; row[o + 3] = 0; }
+        if (opts.square) { row[p] = AMBER[0]; row[p + 1] = AMBER[1]; row[p + 2] = AMBER[2]; }
+        else { row[p] = 0; row[p + 1] = 0; row[p + 2] = 0; row[p + 3] = 0; }
         continue;
       }
-      const rr = Math.round(r / a), gg = Math.round(g / a), bb = Math.round(b / a);
-      if (square) {
-        row[o] = rr; row[o + 1] = gg; row[o + 2] = bb;
-      } else {
-        row[o] = rr; row[o + 1] = gg; row[o + 2] = bb; row[o + 3] = Math.round(alpha);
-      }
+      row[p] = Math.round(r / a); row[p + 1] = Math.round(g / a); row[p + 2] = Math.round(b / a);
+      if (!opts.square) row[p + 3] = Math.round(alpha);
     }
     rows.push(row);
   }
@@ -173,7 +181,7 @@ function icon(size, round, fg, square) {
   ihdr.writeUInt32BE(size, 0);
   ihdr.writeUInt32BE(size, 4);
   ihdr[8] = 8;
-  ihdr[9] = square ? 2 : 6;   // 2 is truecolour, 6 adds alpha. Apple forbids alpha.
+  ihdr[9] = opts.square ? 2 : 6;   // 2 is truecolour, 6 adds alpha. Apple forbids alpha.
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     chunk("IHDR", ihdr),
@@ -182,4 +190,4 @@ function icon(size, round, fg, square) {
   ]);
 }
 
-module.exports = { icon };
+module.exports = { icon, INK, AMBER, FG_SCALE };

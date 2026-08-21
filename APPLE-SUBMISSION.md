@@ -4,7 +4,9 @@ Apple is easier than Google in one way and harder in another.
 
 **Easier:** there is no 12 tester rule. Nothing like it. You can submit the day you
 sign up, and review is usually 24 to 72 hours, though a brand new app can wait 2 to
-5 days.
+5 days. That gap matters more now the app is paid, because Google makes closed
+testers buy a paid app and Apple asks for no testers at all. Apple is the faster
+route to actually being on sale.
 
 **Harder:** every upload must be cryptographically signed with your certificate.
 That is the part that needs care, and it is why people say you need a Mac.
@@ -15,6 +17,12 @@ That is the part that needs care, and it is why people say you need a Mac.
 
 **$99 a year**, and it recurs. Stop paying and your app comes off the store. That is
 the real difference from Google's $25 once.
+
+Apple then keeps **15%** of each sale once you are in the Small Business Program, or
+**30%** if you are not. At $4.99 that is $4.24 a sale against $3.49, so it is worth
+getting right. See the next section, it is on a clock.
+
+At 15% you need **24 sales a year** to cover the $99.
 
 ---
 
@@ -36,6 +44,50 @@ Francis Mercado, which is fine.
 
 Go to **developer.apple.com/programs** and enrol with your Apple ID. You need photo
 ID and Apple usually verifies within a day or two. Pay the $99.
+
+## 1b. The money paperwork, do this before anything else
+
+A price cannot be set until this is done, and one part of it is on a clock, so start
+it the day you enrol.
+
+**App Store Connect**, then **Business**, then **Agreements, Tax, and Banking**.
+
+1. Accept the **Paid Apps agreement**, which Apple also calls Schedule 2. Nothing
+   about selling works until this is active.
+2. Add a bank account.
+3. Fill in the tax forms. In the US that is a W-9.
+
+Allow a day or two for Apple to accept it.
+
+### Then enrol in the Small Business Program, immediately
+
+This is what takes Apple's cut from **30% down to 15%**. It is not automatic and you
+have to apply for it: **developer.apple.com/app-store/small-business-program**.
+
+You qualify. It is for anyone who made under $1M in proceeds last year, and anyone
+new to the App Store.
+
+**The catch is the timing.** The reduced rate starts **15 days after the end of the
+month in which your enrolment is approved**. Approved in March, and 15% begins around
+14 April. Anything you sell before that is charged at 30%.
+
+So enrol now, while the rest of the listing is being built, rather than in the week
+you go on sale. Getting this wrong costs you 15% of every early sale, which is the
+exact period when you are trying to earn back the $99.
+
+You have to accept the Paid Apps agreement before you can enrol, so the order is:
+agreement, then Small Business Program, then everything else.
+
+---
+
+## 1c. Set the price
+
+**App Store Connect**, your app, then **Pricing and Availability**. Choose the
+**$4.99** price point. Apple converts it for every other country itself, so take the
+defaults.
+
+Apple lets you change this whenever you want, unlike Google. Nothing here is a one
+way door.
 
 ## 2. Create the app record
 
@@ -168,6 +220,17 @@ Apple asks what data you collect. Answer **"Data Not Collected"**.
 That is the whole section. It is true, and it earns you the best possible privacy
 label on your listing, which is worth having in a category full of apps that upload
 your resume.
+
+---
+
+## 5b. TestFlight, optional
+
+Apple does not require any testers, so you can skip this entirely and submit.
+
+If you do want a few people to try it first, TestFlight builds are **free to testers
+whatever the app costs**. There is no promo code dance like the one Google needs. Up
+to 100 internal testers and 10,000 external, though external testers need a short
+review of the build first.
 
 ---
 

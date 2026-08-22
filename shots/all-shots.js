@@ -35,8 +35,8 @@ const HTML = `<!doctype html><meta charset="utf-8">
 <body style="margin:0;background:#141414;padding:32px 34px;font-family:-apple-system,Segoe UI,Roboto,Arial">
   ${head("Google Play", "1080 x 1920, six screens")}
   ${row("play", 175)}
-  ${head("Apple App Store", "1290 x 2796, the 6.7 inch size Apple reuses for smaller phones")}
-  ${row("ios67", 175)}
+  ${head("Apple App Store", "1260 x 2736, the 6.9 inch size Apple now requires")}
+  ${row("ios69", 175)}
 </body>`;
 
 (async () => {

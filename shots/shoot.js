@@ -20,7 +20,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 const DEVICES = [
   { name: "play", css: [360, 640], scale: 3 },
-  { name: "ios67", css: [430, 932], scale: 3 }
+  { name: "ios69", css: [420, 912], scale: 3 }   // 1260 x 2736, Apple's required 6.9 inch
 ];
 
 /* put a chosen element just under the sticky nav, so the shot is framed on it */
